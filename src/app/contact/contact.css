@@ -1,0 +1,10 @@
+.contact-bg {
+  background-image: url("../../../public//contact.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.pick{
+  background-color: rgba(219, 247, 253, 0.6);
+}

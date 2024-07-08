@@ -1,0 +1,9 @@
+.col {
+  background-image: url("../../../public//col.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.jobsSelector {
+  background-color: rgba(13, 202, 240, 0.4);
+}
