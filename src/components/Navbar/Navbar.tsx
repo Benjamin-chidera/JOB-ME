@@ -6,10 +6,12 @@ import logo from "../../../public/JOBME.png";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Hamburger from "hamburger-react";
+import { useSession, signOut } from "next-auth/react";
 
 export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   if (pathname === "/login") {
     return null;
@@ -70,24 +72,66 @@ export const Navbar = () => {
               Contact Us
             </Link>
           </li>
+
+          {session?.user?.role === "employer" && (
+            <li>
+              <Link
+                href="/jobs/applied"
+                className={` text-lg ${
+                  pathname === "/jobs/applied" ? "text-[#0DCAF0]" : "text-black"
+                }`}
+              >
+                Jobs Applied
+              </Link>
+            </li>
+          )}
+
+          {session?.user?.role === "employer" && (
+            <li>
+              <Link
+                href="/jobs/employer"
+                className={` text-lg ${
+                  pathname === "/jobs/employer"
+                    ? "text-[#0DCAF0]"
+                    : "text-black"
+                }`}
+              >
+                Jobs Posted By An Employer
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
+
       <div className=" hidden lg:block">
         {" "}
         <ul className="flex items-center gap-10">
-          <li>
-            <Link
-              href="/"
-              className=" text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
-            >
-              Post Job
-            </Link>
-          </li>
-          <li>
-            <Link href="/login" className=" text-lg">
-              Login
-            </Link>
-          </li>
+          {session?.user?.role === "employer" && (
+            <li>
+              <Link
+                href="/employer/post-jobs"
+                className=" text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
+              >
+                Post Job
+              </Link>
+            </li>
+          )}
+          {!session ? (
+            <li>
+              <Link href="/login" className=" text-lg">
+                Login
+              </Link>
+            </li>
+          ) : (
+            <li>
+              <button
+                className=" text-lg bg-[#0DCAF0] py-2 px-3 text-white rounded-lg"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
+                Sign Out
+              </button>
+            </li>
+          )}
         </ul>
         {/* llarge devices */}
       </div>
@@ -140,25 +184,68 @@ export const Navbar = () => {
                     Contact Us
                   </Link>
                 </li>
+
+                {session?.user?.role === "employer" && (
+                  <li>
+                    <Link
+                      href="/jobs/applied"
+                      className={` text-lg ${
+                        pathname === "/jobs/applied"
+                          ? "text-[#0DCAF0]"
+                          : "text-black"
+                      }`}
+                    >
+                      Jobs Applied
+                    </Link>
+                  </li>
+                )}
+
+                {session?.user?.role === "employer" && (
+                  <li>
+                    <Link
+                      href="/jobs/employer"
+                      className={` text-lg ${
+                        pathname === "/jobs/employer"
+                          ? "text-[#0DCAF0]"
+                          : "text-black"
+                      }`}
+                    >
+                      Jobs Posted By An Employer
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
 
             <div className=" lg:hidden mt-10">
               {" "}
               <ul className="flex flex-col px-5 gap-10">
-                <li>
-                  <Link
-                    href="/jobs"
-                    className=" text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
-                  >
-                    Post Job
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className=" text-lg">
-                    Login
-                  </Link>
-                </li>
+                {session?.user?.role === "employer" && (
+                  <li>
+                    <Link
+                      href="/employer/post-jobs"
+                      className=" text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
+                    >
+                      Post Job
+                    </Link>
+                  </li>
+                )}
+                {!session ? (
+                  <li>
+                    <Link href="/login" className=" text-lg">
+                      Login
+                    </Link>
+                  </li>
+                ) : (
+                  <li>
+                    <button
+                      className=" text-lg bg-[#0DCAF0] py-2 px-3 text-white rounded-lg"
+                      onClick={() => signOut({ callbackUrl: "/login" })}
+                    >
+                      Sign Out
+                    </button>
+                  </li>
+                )}
               </ul>
               {/* llarge devices */}
             </div>

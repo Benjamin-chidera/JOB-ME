@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import "../../../app/(auth)/signup/signup.css";
+import "./signup.css";
 import Link from "next/link";
 import fb from "../../../../public/fb.png";
 import lk from "../../../../public/lk.png";

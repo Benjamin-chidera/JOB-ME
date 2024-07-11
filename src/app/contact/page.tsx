@@ -1,14 +1,48 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import "./contact.css";
 import contact from "../../../public/contact.png";
 import Image from "next/image";
 import { BiPhoneCall } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { contactUs } from "@/redux/app/authSlice";
+import { ContactModal } from "@/components/modals/ContactModal";
+
+type contactTypes = {
+  name: string;
+  email: string;
+  phonenumber: string;
+  subject: string;
+  message: string;
+};
 
 const Contact = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<contactTypes>();
+  const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmitContact: SubmitHandler<contactTypes> = (form) => {
+    dispatch(contactUs(form));
+    reset();
+    setIsModalOpen(true);
+  };
+
   return (
     <main className="relative mb-10">
+      <ContactModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
       <div>
         <Image
           src={contact}
@@ -21,38 +55,81 @@ const Contact = () => {
         <p>We want to hear from you</p>
       </div>
       <section className="flex items-center justify-center">
-        <form className="bg-[#DBF7FD] w-fit p-5 flex flex-col gap-3 lg:-mt-10 rounded-lg max-w-full">
+        <form
+          className="bg-[#DBF7FD] w-fit p-5 flex flex-col gap-3 lg:-mt-10 rounded-lg max-w-full"
+          onSubmit={handleSubmit(handleSubmitContact)}
+        >
           <div className="flex items-center gap-4">
-            <input
-              type="text"
-              placeholder="Name*"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <input
-              type="email"
-              placeholder="Email*"
-              className="input input-bordered w-full max-w-xs"
-            />
+            <div className=" w-full">
+              <input
+                type="text"
+                placeholder="Name*"
+                className="input input-bordered w-full max-w-xs"
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <p className=" text-start text-sm text-red-700">
+                  Name is Required
+                </p>
+              )}
+            </div>
+
+            <div className=" w-full">
+              <input
+                type="email"
+                placeholder="Email*"
+                className="input input-bordered w-full max-w-xs"
+                {...register("email", { required: true })}
+              />
+              {errors.email && (
+                <p className=" text-start text-sm text-red-700">
+                  Email Address is Required
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <input
-              type="tel"
-              placeholder="Phone number*"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <input
-              type="text"
-              placeholder="Subject*"
-              className="input input-bordered w-full max-w-xs"
-            />
+            <div>
+              <input
+                type="tel"
+                placeholder="Phone number*"
+                className="input input-bordered w-full max-w-xs"
+                {...register("phonenumber", { required: true })}
+              />
+              {errors.phonenumber && (
+                <p className=" text-start text-sm text-red-700">
+                  Phone Number is Required
+                </p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="text"
+                placeholder="Subject*"
+                className="input input-bordered w-full max-w-xs"
+                {...register("subject", { required: true })}
+              />
+              {errors.subject && (
+                <p className=" text-start text-sm text-red-700">
+                  Message subject is Required
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
             <textarea
               className="textarea w-full h-40 resize-none max-w-full"
               placeholder="Message*"
+              {...register("message", { required: true })}
             ></textarea>
+            {errors.message && (
+              <p className=" text-start text-sm text-red-700">
+                Message is Required
+              </p>
+            )}
           </div>
 
           <button className="bg-[#0DCAF0] py-2 text-white rounded-lg">

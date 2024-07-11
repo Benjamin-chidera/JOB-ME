@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import insta from "../../../../public/insta.png";
-import map from "../../../../public/map.png";
+import insta from "../../../../../public/insta.png";
+import map from "../../../../../public/map.png";
 import Image from "next/image";
 import { CiClock2, CiUser } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
@@ -11,84 +11,24 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
-import { applyJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
+import { getEmployerJobsDetails } from "@/redux/app/jobSlice";
 import { format } from "timeago.js";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const dispatch = useDispatch();
-  const { employerJobsDetail } = useSelector((state) => state.jobs);
-
-  const { data: session } = useSession();
-  const [hasApplied, setHasApplied] = useState(false);
-
-  console.log(session);
-  
+  const { getEmployerJobsDetail } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getEmployerJobsDetails(id));
   }, [id]);
 
-  const responsibilities = employerJobsDetail?.responsibilities
-    ? JSON.parse(employerJobsDetail?.responsibilities)
+  const responsibilities = getEmployerJobsDetail?.responsibilities
+    ? JSON.parse(getEmployerJobsDetail?.responsibilities)
     : [];
-  const skills = employerJobsDetail?.skills
-    ? JSON.parse(employerJobsDetail?.skills)
+  const skills = getEmployerJobsDetail?.skills
+    ? JSON.parse(getEmployerJobsDetail?.skills)
     : [];
-
-  console.log(employerJobsDetail);
-
-  // apply for a job
-
-  useEffect(() => {
-    const checkApplicationStatus = async () => {
-      if (session?.user?.id) {
-        // Check local storage first
-        const localStorageKey = `application_${session.user.id}_${employerJobsDetail?.id}`;
-        const localStorageStatus = localStorage.getItem(localStorageKey);
-
-        if (localStorageStatus) {
-          setHasApplied(JSON.parse(localStorageStatus));
-        } else {
-          try {
-            const response = await fetch(
-              `/api/applications?userId=${session.user.id}&jobId=${employerJobsDetail.id}`
-            );
-            const data = await response.json();
-            setHasApplied(data.applied);
-            // Save to local storage
-            localStorage.setItem(localStorageKey, JSON.stringify(data.applied));
-          } catch (error) {
-            console.error("Failed to check application status:", error);
-          }
-        }
-      }
-    };
-
-    checkApplicationStatus();
-  }, [session?.user?.id, employerJobsDetail?.id]);
-
-  const handleApplyForJob = async () => {
-    if (session?.user?.id && !hasApplied) {
-      const form = {
-        userId: session.user.id,
-        jobId: employerJobsDetail?.id,
-      };
-      try {
-        await dispatch(applyJobs(form));
-        setHasApplied(true);
-        // Update local storage
-        const localStorageKey = `application_${session.user.id}_${employerJobsDetail?.id}`;
-        localStorage.setItem(localStorageKey, JSON.stringify(true));
-      } catch (error) {
-        console.error("Failed to apply for job:", error);
-      }
-    }
-  };
-
-  const router = useRouter();
 
   return (
     <main className=" mt-10">
@@ -96,16 +36,18 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         <section>
           <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
             <Image
-              src={employerJobsDetail?.companyImage}
+              src={getEmployerJobsDetail?.companyImage}
               alt="company-logo"
               width={40}
               height={40}
               className="w-10 h-10 shadow-lg"
             />
             <h2 className=" font-semibold text-2xl mt-3">
-              {employerJobsDetail?.positions}
+              {getEmployerJobsDetail?.positions}
             </h2>
-            <p className=" max-w-md my-3">{employerJobsDetail?.description}</p>
+            <p className=" max-w-md my-3">
+              {getEmployerJobsDetail?.description}
+            </p>
 
             <p className=" mt-10 font-semibold text-xl">Job Information:</p>
 
@@ -117,7 +59,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Employment Type:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {employerJobsDetail?.jobType}
+                  {getEmployerJobsDetail?.jobType}
                 </span>
               </p>
 
@@ -128,7 +70,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Location:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {employerJobsDetail?.country}
+                  {getEmployerJobsDetail?.country}
                 </span>
               </p>
 
@@ -139,7 +81,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Date Posted:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {format(employerJobsDetail?.created_at)}
+                  {format(getEmployerJobsDetail?.created_at)}
                 </span>
               </p>
 
@@ -150,8 +92,8 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Experience:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {employerJobsDetail?.experience}{" "}
-                  {employerJobsDetail?.experience > 2 ? "Year" : "Years"}
+                  {getEmployerJobsDetail?.experience}{" "}
+                  {getEmployerJobsDetail?.experience > 2 ? "Year" : "Years"}
                 </span>
               </p>
 
@@ -162,7 +104,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Salary:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {employerJobsDetail?.salary}
+                  {getEmployerJobsDetail?.salary}
                 </span>
               </p>
             </section>
@@ -178,7 +120,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </section>
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
           <h2 className=" font-semibold text-2xl">Job Description:</h2>
-          <p className="max-w-4xl my-5">{employerJobsDetail?.description}</p>
+          <p className="max-w-4xl my-5">{getEmployerJobsDetail?.description}</p>
 
           <section className=" mt-10">
             {/*   Duties & Responsibilities: */}
@@ -208,9 +150,10 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
             <h2 className=" font-semibold text-2xl">
               Skills & Qualifications:
             </h2>
+
             <div className=" mt-5">
               <ul className=" space-y-3">
-                {skills.map((item: any, index: any) => (
+                {skills.map((item, index) => (
                   <li
                     key={index}
                     className=" flex md:items-center gap-2 font-[500]"
@@ -224,22 +167,6 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
               </ul>
             </div>
           </section>
-          <div className="mt-2">
-            {session?.user?.role !== "employer" && (
-              <button
-                className={`text-[16px] py-2 px-3 text-white rounded-lg ${
-                  hasApplied ? "bg-gray-400 cursor-not-allowed" : "bg-[#0DCAF0]"
-                }`}
-                // onClick={handleApplyForJob}
-                onClick={() =>
-                  router.push(`/jobs/${employerJobsDetail.id}/application`)
-                }
-                disabled={hasApplied}
-              >
-                {hasApplied ? "Applied" : "Apply Now"}
-              </button>
-            )}
-          </div>
         </section>
       </section>
 

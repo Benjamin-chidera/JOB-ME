@@ -1,8 +1,9 @@
+
 "use client";
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import "./joblist.css";
+import "../JobsList/joblist.css";
 import { CiClock2 } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import Link from "next/link";
@@ -25,7 +26,7 @@ type jobsType = {
   };
 };
 
-export const JobLists = ({ j }: jobsType) => {
+export const ApplicantDetail = ({ j }: jobsType) => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const [hasApplied, setHasApplied] = useState(false);
@@ -135,7 +136,9 @@ export const JobLists = ({ j }: jobsType) => {
           )}
 
           {session?.user?.role === "employer" && (
-            <Link href={`/jobs/applicant/${j.id}`} className=" text-sm">View Applicants</Link>
+            <Link href={`/jobs/applicant/details/${j.id}`} className=" text-sm">
+              View Details
+            </Link>
           )}
         </div>
       </section>

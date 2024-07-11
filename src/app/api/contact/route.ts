@@ -1,0 +1,34 @@
+import { connect } from "@/libs/connect";
+import { NextRequest, NextResponse } from "next/server";
+import { sendEmail } from "@/libs/sendEmail";
+
+export const POST = async (req: NextRequest) => {
+  try {
+    const { name, email, phonenumber, subject, message } = await req.json();
+    const db = await connect();
+
+    const q =
+      "INSERT INTO contact (name, email, phonenumber, subject, message) VALUES(?,?,?,?,?)";
+
+    const values = [name, email, phonenumber, subject, message];
+
+    const [result] = await db.query(q, values);
+
+    const replyMessage =
+      `Thank you for contacting JOBME ${name} with the email ${email} and phone number ${phonenumber}. We will get be to you immediately.` ;
+    const subjects = subject;
+    const messages = ` Your message ${message}. => Our Message: ${replyMessage}`;
+    const send_to = email;
+    const sent_from = process.env.EMAIL_USER; // Your email address
+    const reply_to = email;
+    await sendEmail(subjects, messages, sent_from, reply_to, send_to);
+
+    return NextResponse.json(
+      { msg: "Contact sent successfully", result },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.log("Error:", error);
+    return NextResponse.json({ err: error.message }, { status: 500 });
+  }
+};
