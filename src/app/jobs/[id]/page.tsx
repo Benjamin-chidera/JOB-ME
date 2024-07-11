@@ -11,24 +11,23 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
-import { applyJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
+import { applyJobs, getAllJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
 import { format } from "timeago.js";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { FormatCurrency } from "@/libs/FormatCurrency";
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const dispatch = useDispatch();
-  const { employerJobsDetail } = useSelector((state) => state.jobs);
+  const { employerJobsDetail, allJobs } = useSelector((state) => state.jobs);
 
   const { data: session } = useSession();
   const [hasApplied, setHasApplied] = useState(false);
 
-  console.log(session);
-  
-
   useEffect(() => {
     dispatch(getEmployerJobsDetails(id));
+    dispatch(getAllJobs());
   }, [id]);
 
   const responsibilities = employerJobsDetail?.responsibilities
@@ -38,7 +37,16 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
     ? JSON.parse(employerJobsDetail?.skills)
     : [];
 
-  console.log(employerJobsDetail);
+  // console.log(employerJobsDetail);
+  // console.log(allJobs);
+
+  const isRelated = allJobs.filter(
+    (job) => job.positions === employerJobsDetail.positions
+  );
+
+  
+  const sliceRelatedJobs = isRelated?.slice(0, 3)
+  console.log({ sliceRelatedJobs });
 
   // apply for a job
 
@@ -69,24 +77,6 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
 
     checkApplicationStatus();
   }, [session?.user?.id, employerJobsDetail?.id]);
-
-  const handleApplyForJob = async () => {
-    if (session?.user?.id && !hasApplied) {
-      const form = {
-        userId: session.user.id,
-        jobId: employerJobsDetail?.id,
-      };
-      try {
-        await dispatch(applyJobs(form));
-        setHasApplied(true);
-        // Update local storage
-        const localStorageKey = `application_${session.user.id}_${employerJobsDetail?.id}`;
-        localStorage.setItem(localStorageKey, JSON.stringify(true));
-      } catch (error) {
-        console.error("Failed to apply for job:", error);
-      }
-    }
-  };
 
   const router = useRouter();
 
@@ -162,7 +152,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Salary:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {employerJobsDetail?.salary}
+                  {FormatCurrency(employerJobsDetail?.salary, "USD")}
                 </span>
               </p>
             </section>
@@ -254,7 +244,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className=" mt-10">
-          <RelatedJobs />
+          <RelatedJobs sliceRelatedJobs={sliceRelatedJobs} />
         </div>
       </section>
     </main>

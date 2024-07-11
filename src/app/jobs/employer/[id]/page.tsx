@@ -11,24 +11,34 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployerJobsDetails } from "@/redux/app/jobSlice";
+import { getAllJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
 import { format } from "timeago.js";
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const dispatch = useDispatch();
-  const { getEmployerJobsDetail } = useSelector((state) => state.jobs);
+  const { employerJobsDetail, allJobs } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getEmployerJobsDetails(id));
+    dispatch(getAllJobs());
   }, [id]);
 
-  const responsibilities = getEmployerJobsDetail?.responsibilities
-    ? JSON.parse(getEmployerJobsDetail?.responsibilities)
+  const responsibilities = employerJobsDetail?.responsibilities
+    ? JSON.parse(employerJobsDetail?.responsibilities)
     : [];
-  const skills = getEmployerJobsDetail?.skills
-    ? JSON.parse(getEmployerJobsDetail?.skills)
+  const skills = employerJobsDetail?.skills
+    ? JSON.parse(employerJobsDetail?.skills)
     : [];
+
+  // console.log(employerJobsDetail);
+
+  const isRelated = allJobs.filter(
+    (job) => job.positions === employerJobsDetail.positions
+  );
+
+  const sliceRelatedJobs = isRelated?.slice(0, 3);
+  // console.log({ sliceRelatedJobs });
 
   return (
     <main className=" mt-10">
@@ -36,18 +46,16 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         <section>
           <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
             <Image
-              src={getEmployerJobsDetail?.companyImage}
+              src={employerJobsDetail?.companyImage}
               alt="company-logo"
               width={40}
               height={40}
               className="w-10 h-10 shadow-lg"
             />
             <h2 className=" font-semibold text-2xl mt-3">
-              {getEmployerJobsDetail?.positions}
+              {employerJobsDetail?.positions}
             </h2>
-            <p className=" max-w-md my-3">
-              {getEmployerJobsDetail?.description}
-            </p>
+            <p className=" max-w-md my-3">{employerJobsDetail?.description}</p>
 
             <p className=" mt-10 font-semibold text-xl">Job Information:</p>
 
@@ -59,7 +67,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Employment Type:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {getEmployerJobsDetail?.jobType}
+                  {employerJobsDetail?.jobType}
                 </span>
               </p>
 
@@ -70,7 +78,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Location:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {getEmployerJobsDetail?.country}
+                  {employerJobsDetail?.country}
                 </span>
               </p>
 
@@ -81,7 +89,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Date Posted:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {format(getEmployerJobsDetail?.created_at)}
+                  {format(employerJobsDetail?.created_at)}
                 </span>
               </p>
 
@@ -92,8 +100,8 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Experience:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {getEmployerJobsDetail?.experience}{" "}
-                  {getEmployerJobsDetail?.experience > 2 ? "Year" : "Years"}
+                  {employerJobsDetail?.experience}{" "}
+                  {employerJobsDetail?.experience > 2 ? "Year" : "Years"}
                 </span>
               </p>
 
@@ -104,7 +112,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Salary:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {getEmployerJobsDetail?.salary}
+                  {employerJobsDetail?.salary}
                 </span>
               </p>
             </section>
@@ -120,7 +128,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </section>
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
           <h2 className=" font-semibold text-2xl">Job Description:</h2>
-          <p className="max-w-4xl my-5">{getEmployerJobsDetail?.description}</p>
+          <p className="max-w-4xl my-5">{employerJobsDetail?.description}</p>
 
           <section className=" mt-10">
             {/*   Duties & Responsibilities: */}
@@ -181,7 +189,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className=" mt-10">
-          <RelatedJobs />
+          <RelatedJobs sliceRelatedJobs={sliceRelatedJobs} />
         </div>
       </section>
     </main>

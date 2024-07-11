@@ -12,6 +12,7 @@ import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
 import {
   applyJobs,
+  getAllJobs,
   getApplicantJobDetails,
   getEmployerJobsDetails,
 } from "@/redux/app/jobSlice";
@@ -25,22 +26,22 @@ import { MyPdf } from "@/components/pdf/MyPdf";
 
 const ApplicantsDetails = ({ params }) => {
   const { id } = params;
-  const { applicantJobDetails } = useSelector((state) => state.jobs);
+  const { applicantJobDetails, allJobs } = useSelector((state) => state.jobs);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getApplicantJobDetails(id));
+    dispatch(getAllJobs());
   }, [id]);
 
-  console.log(applicantJobDetails?.resume);
+  // console.log(applicantJobDetails?.resume);
 
-  //   const docs = [
-  //     {
-  //       uri: applicantJobDetails?.resume,
-  //       fileType: "pdf",
-  //       fileName: "Applicant Resume",
-  //     },
-  //   ];
+  const isRelated = allJobs.filter(
+    (job) => job?.positions === applicantJobDetails?.positions
+  );
+
+  const sliceRelatedJobs = isRelated?.slice(0, 3);
+  console.log({ sliceRelatedJobs });
 
   return (
     <main className=" mt-10">
@@ -130,7 +131,7 @@ const ApplicantsDetails = ({ params }) => {
         </section>
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
           <h2 className=" font-semibold text-2xl">Job Description:</h2>
-       
+
           {/* <PDFViewer>
             <MyPdf applicantJobDetails={applicantJobDetails} />
           </PDFViewer> */}
@@ -148,7 +149,7 @@ const ApplicantsDetails = ({ params }) => {
         </div>
 
         <div className=" mt-10">
-          <RelatedJobs />
+          <RelatedJobs sliceRelatedJobs={sliceRelatedJobs} />
         </div>
       </section>
     </main>

@@ -1,3 +1,5 @@
+"use client";
+
 import { JobSelector } from "@/components/Home/jobSelector/JobSelector";
 import "./../components/Home/hero.css";
 import vector from "../../public/Vector.png";
@@ -7,9 +9,49 @@ import skillman from "../../public/skillman.png";
 import Image from "next/image";
 import Link from "next/link";
 import { LatestJobs } from "@/components/Home/LatestJobs/LatestJobs";
-import {Testimonials} from "@/components/Home/testimonials/Testimonials"
+import { Testimonials } from "@/components/Home/testimonials/Testimonials";
+import { useSelector } from "react-redux";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Home() {
+  const { allJobs } = useSelector((state) => state.jobs);
+  const [jobType, setJobType] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [position, setPosition] = useState("");
+  const [country, setCountry] = useState("");
+  const [jobs, setJobs] = useState([]);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const fetchJobs = async (filters = {}) => {
+    try {
+      const { data } = await axios.get("http://localhost:3000/api/jobs", {
+        params: filters,
+      });
+      setJobs(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearch = async (e: any) => {
+    e.preventDefault();
+    const filters = { jobType, companyName, position, country };
+    fetchJobs(filters);
+
+    if (pathname === "/") {
+      router.push("/jobs");
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  // console.log(allJobs);
+
   return (
     <main className=" pb-10">
       <div className="hero">
@@ -19,7 +61,17 @@ export default function Home() {
         </p>
 
         <div className="w-full">
-          <JobSelector />
+          <JobSelector
+            jobType={jobType}
+            setJobType={setJobType}
+            companyName={companyName}
+            setCompanyName={setCompanyName}
+            position={position}
+            setPosition={setPosition}
+            country={country}
+            setCountry={setCountry}
+            handleSearch={handleSearch}
+          />
         </div>
       </div>
 
@@ -54,7 +106,7 @@ export default function Home() {
               </p>
 
               <Link
-                href={"/"}
+                href={"/jobs"}
                 className="font-semibold text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
               >
                 Discover More
@@ -78,7 +130,7 @@ export default function Home() {
               </p>
 
               <Link
-                href={"/"}
+                href={"/jobs"}
                 className="font-semibold text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
               >
                 Discover More
@@ -128,7 +180,10 @@ export default function Home() {
               enim dolor velit aliquam ut ac.{" "}
             </p>
 
-            <button className="font-semibold text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg">
+            <button
+              className="font-semibold text-lg bg-[#0DCAF0] py-3 px-5 text-white rounded-lg"
+              onClick={() => router.push("/jobs")}
+            >
               Upload Your CV
             </button>
           </div>

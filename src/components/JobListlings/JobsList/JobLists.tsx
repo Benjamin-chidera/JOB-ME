@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { applyJobs } from "@/redux/app/jobSlice";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { FormatCurrency } from "@/libs/FormatCurrency";
 
 type jobsType = {
   j: {
@@ -118,7 +119,7 @@ export const JobLists = ({ j }: jobsType) => {
             {j.country}
           </p>
 
-          <p className="mt-1 ml-2">${j.salary}</p>
+          <p className="mt-1 ml-2">{FormatCurrency(j.salary, "USD")}</p>
         </div>
         <div className="mt-2 lg:mt-0">
           {session?.user?.role !== "employer" && (
@@ -135,7 +136,9 @@ export const JobLists = ({ j }: jobsType) => {
           )}
 
           {session?.user?.role === "employer" && (
-            <Link href={`/jobs/applicant/${j.id}`} className=" text-sm">View Applicants</Link>
+            <Link href={`/jobs/applicant/${j.id}`} className=" text-sm">
+              View Applicants
+            </Link>
           )}
         </div>
       </section>

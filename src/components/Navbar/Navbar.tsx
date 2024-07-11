@@ -33,9 +33,9 @@ export const Navbar = () => {
     <main
       className={`w-11/12 mx-auto flex items-center justify-between h-18 lg:h-20 `}
     >
-      <div>
+      <Link href={"/"}>
         <Image src={logo} width={100} height={100} alt="Company-logo" />
-      </div>
+      </Link>
 
       <div className=" hidden lg:block">
         {/* llarge devices */}
@@ -62,18 +62,20 @@ export const Navbar = () => {
               Job Listings
             </Link>
           </li>
-          <li>
-            <Link
-              href="/contact"
-              className={` text-lg ${
-                pathname === "/contact" ? "text-[#0DCAF0]" : "text-black"
-              }`}
-            >
-              Contact Us
-            </Link>
-          </li>
+          {session?.user?.role !== "employer" && (
+            <li>
+              <Link
+                href="/contact"
+                className={` text-lg ${
+                  pathname === "/contact" ? "text-[#0DCAF0]" : "text-black"
+                }`}
+              >
+                Contact Us
+              </Link>
+            </li>
+          )}
 
-          {session?.user?.role === "employer" && (
+          {/* {session?.user?.role === "employer" && (
             <li>
               <Link
                 href="/jobs/applied"
@@ -84,7 +86,7 @@ export const Navbar = () => {
                 Jobs Applied
               </Link>
             </li>
-          )}
+          )} */}
 
           {session?.user?.role === "employer" && (
             <li>
@@ -185,7 +187,7 @@ export const Navbar = () => {
                   </Link>
                 </li>
 
-                {session?.user?.role === "employer" && (
+                {/* {session?.user?.role === "employer" && (
                   <li>
                     <Link
                       href="/jobs/applied"
@@ -198,7 +200,7 @@ export const Navbar = () => {
                       Jobs Applied
                     </Link>
                   </li>
-                )}
+                )} */}
 
                 {session?.user?.role === "employer" && (
                   <li>
