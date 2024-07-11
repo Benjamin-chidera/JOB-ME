@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { registerUser } from "@/redux/app/authSlice";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/store/hooks";
 
 type Inputs = {
   email: string;
@@ -39,7 +40,7 @@ const Employer = () => {
 
   const router = useRouter();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSignup: SubmitHandler<Inputs> = (form) => {
     if (form.password !== form.confirmPassword) {
@@ -55,7 +56,7 @@ const Employer = () => {
       role: "employer",
     };
 
-    dispatch(registerUser(formData));
+    dispatch(registerUser(formData)).unwrap();
     router.push("/login");
   };
 

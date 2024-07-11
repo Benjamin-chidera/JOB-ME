@@ -1,5 +1,25 @@
 import { connect } from "@/libs/connect";
 import { NextRequest, NextResponse } from "next/server";
+import { RowDataPacket, OkPacket } from "mysql2"; // Import these if you're using mysql2
+
+// Define interfaces for your database results
+interface Application extends RowDataPacket {
+  id: number;
+  user_id: number;
+  job_id: number;
+  // Add other fields as necessary
+}
+
+interface JobApplication extends Application {
+  positions: string;
+  companyName: string;
+}
+
+interface ApplicantInfo extends Application {
+  firstname: string;
+  lastname: string;
+  email: string;
+}
 
 export const POST = async (req: NextRequest) => {
   // apply for a job
@@ -15,18 +35,6 @@ export const POST = async (req: NextRequest) => {
       resume,
     } = await req.json();
     const db = await connect();
-
-    // Check if the user has already applied
-    // const checkQuery =
-    //   "SELECT * FROM applications WHERE user_id = ? AND job_id = ?";
-    // const [existingApplications] = await db.query(checkQuery, [userId, jobId]);
-
-    // if (existingApplications.length > 0) {
-    //   return NextResponse.json(
-    //     { msg: "You have already applied for this job" },
-    //     { status: 400 }
-    //   );
-    // }
 
     // If not applied, insert the new application
     const insertQuery =
@@ -56,7 +64,6 @@ export const POST = async (req: NextRequest) => {
 };
 
 export const GET = async (req: NextRequest) => {
-  // check applied job
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
@@ -68,7 +75,7 @@ export const GET = async (req: NextRequest) => {
       // Check if a user has applied for a specific job
       const query =
         "SELECT * FROM applications WHERE user_id = ? AND job_id = ?";
-      const [result] = await db.query(query, [userId, jobId]);
+      const [result] = await db.query<Application[]>(query, [userId, jobId]);
       return NextResponse.json({ applied: result.length > 0 }, { status: 200 });
     } else if (userId) {
       // Get all applications for a user
@@ -78,7 +85,7 @@ export const GET = async (req: NextRequest) => {
         JOIN jobs j ON a.job_id = j.id 
         WHERE a.user_id = ?
       `;
-      const [results] = await db.query(query, [userId]);
+      const [results] = await db.query<JobApplication[]>(query, [userId]);
       return NextResponse.json({ applications: results }, { status: 200 });
     } else if (jobId) {
       // Get all applicants for a job
@@ -88,7 +95,7 @@ export const GET = async (req: NextRequest) => {
         JOIN users u ON a.user_id = u.id 
         WHERE a.job_id = ?
       `;
-      const [results] = await db.query(query, [jobId]);
+      const [results] = await db.query<ApplicantInfo[]>(query, [jobId]);
       return NextResponse.json({ applicants: results }, { status: 200 });
     } else {
       return NextResponse.json(
@@ -97,10 +104,20 @@ export const GET = async (req: NextRequest) => {
       );
     }
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { err: "Failed to retrieve application data", error },
-      { status: 500 }
-    );
+    console.error(error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { err: "Failed to retrieve application data", error: error.message },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        {
+          err: "Failed to retrieve application data",
+          error: "An unknown error occurred",
+        },
+        { status: 500 }
+      );
+    }
   }
 };

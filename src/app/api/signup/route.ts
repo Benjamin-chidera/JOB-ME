@@ -3,6 +3,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { connect } from "@/libs/connect";
 import { NextRequest, NextResponse } from "next/server";
+import { RowDataPacket, OkPacket } from "mysql2"; // Import these if you're using mysql2
+
+// Define an interface for your user structure
+interface User extends RowDataPacket {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  role: string;
+}
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -15,7 +26,9 @@ export const POST = async (req: NextRequest) => {
     const db = await connect();
 
     const checkEmailAddressQuery = "SELECT * FROM users WHERE email=?";
-    const [checkEmailAddress] = await db.query(checkEmailAddressQuery, [email]);
+    const [checkEmailAddress] = await db.query<User[]>(checkEmailAddressQuery, [
+      email,
+    ]);
 
     if (checkEmailAddress.length > 0) {
       await db.end();
@@ -31,7 +44,7 @@ export const POST = async (req: NextRequest) => {
       "INSERT INTO users (firstname, lastname, email, password, role) VALUES (?, ?, ?, ?, ?)";
     const values = [firstname, lastname, email, hashedPassword, role];
 
-    const [result] = await db.query(insertUserQuery, values);
+    const [result] = await db.query<OkPacket>(insertUserQuery, values);
     await db.end();
 
     return NextResponse.json(
@@ -40,6 +53,13 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (error) {
     console.log("Error:", error);
-    return NextResponse.json({ err: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ err: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json(
+        { err: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 };

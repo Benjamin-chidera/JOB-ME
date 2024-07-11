@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
+import {
+  CldUploadWidget,
+  CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
 import { applyJobs } from "@/redux/app/jobSlice";
+import { useAppDispatch } from "@/redux/store/hooks";
 
 type applyJobType = {
   firstname: string;
@@ -26,7 +30,7 @@ const JobApplication = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   console.log("job id", id);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: session } = useSession();
   console.log(session?.user);
 
@@ -82,7 +86,7 @@ const JobApplication = ({ params }: { params: { id: string } }) => {
         // Update local storage
         const localStorageKey = `application_${session.user.id}_${id}`;
         localStorage.setItem(localStorageKey, JSON.stringify(true));
-        setError("")
+        setError("");
       } catch (error) {
         console.error("Failed to apply for job:", error);
         setError("An error occurred. Please try again later.");
@@ -201,8 +205,10 @@ const JobApplication = ({ params }: { params: { id: string } }) => {
                   <CldUploadWidget
                     uploadPreset="JOBME-jobs"
                     options={{ sources: ["local"] }}
-                    onUpload={(result) => {
-                      setCompanyImageUrl(result?.info?.secure_url);
+                    onUpload={(result: CloudinaryUploadWidgetResults) => {
+                      if (result.info && typeof result.info !== "string") {
+                        setCompanyImageUrl(result.info.secure_url);
+                      }
                     }}
                   >
                     {({ open }) => {

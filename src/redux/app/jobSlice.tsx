@@ -1,7 +1,47 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const postJobs = createAsyncThunk(
+export interface PostJobData {
+  positions: string;
+  companyName: string;
+  companyImage: string;
+  jobType: string;
+  country: string;
+  salary: number;
+  experience: number;
+  description: string;
+  responsibilities: string[];
+  skills: string[];
+  user_id: string | undefined;
+}
+
+interface ApplyJobData {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phonenumber: string;
+  coverletter: string;
+  resume: string;
+  userId: string;
+  jobId: string;
+}
+
+interface EmployerJobDetail {
+  responsibilities: string[];
+  skills: string[];
+  positions: string;
+  companyImage: string;
+  description: string;
+  jobType: string;
+  country: string;
+  created_at: string;
+  experience: number;
+  salary: number;
+  id: string;
+  // Add other properties as needed
+}
+
+export const postJobs = createAsyncThunk<any, PostJobData>(
   "jobs/postJobs",
   async (form, { rejectWithValue }) => {
     try {
@@ -40,7 +80,7 @@ export const getAllJobs = createAsyncThunk("jobs/getAllJobs", async () => {
 
 export const getEmployerJobsDetails = createAsyncThunk(
   "jobs/getEmployerJobsDetails",
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`http://localhost:3000/api/jobs/${id}`);
       return data;
@@ -51,7 +91,7 @@ export const getEmployerJobsDetails = createAsyncThunk(
   }
 );
 
-export const applyJobs = createAsyncThunk(
+export const applyJobs = createAsyncThunk<any, ApplyJobData>(
   "jobs/applyJobs",
   async (form, { rejectWithValue }) => {
     try {
@@ -97,16 +137,28 @@ export const getApplicantJobDetails = createAsyncThunk(
   }
 );
 
-const initialState = {
+interface JobState {
+  postJob: PostJobData | null;
+  status: string;
+  error: any;
+  employerJobs: EmployerJobDetail[];
+  employerJobsDetail: EmployerJobDetail | null;
+  allJobs: EmployerJobDetail[];
+  apply: ApplyJobData | null;
+  appliedJobs: ApplyJobData[];
+  applicantJobDetails: ApplyJobData | null;
+}
+
+const initialState: JobState = {
   postJob: null,
   status: "idle",
   error: null,
   employerJobs: [],
-  employerJobsDetail: {},
+  employerJobsDetail: null,
   allJobs: [],
   apply: null,
   appliedJobs: [],
-  applicantJobDetails: {}
+  applicantJobDetails: null,
 };
 
 const jobSlice = createSlice({
@@ -152,7 +204,7 @@ const jobSlice = createSlice({
       .addCase(getEmployerJobsDetails.pending, (state) => {
         state.status = "loading";
         state.error = null;
-        state.employerJobsDetail = {};
+        state.employerJobsDetail = null;
       })
       .addCase(getEmployerJobsDetails.fulfilled, (state, { payload }) => {
         state.status = "idle";
@@ -162,7 +214,7 @@ const jobSlice = createSlice({
       .addCase(getEmployerJobsDetails.rejected, (state, { payload }) => {
         state.status = "idle";
         state.error = payload;
-        state.employerJobsDetail = {};
+        state.employerJobsDetail = null;
       })
 
       // GET ALL JOBS
@@ -203,7 +255,7 @@ const jobSlice = createSlice({
       .addCase(getApplliedJobs.pending, (state) => {
         state.status = "loading";
         state.error = null;
-        state.appliedJobs = null;
+        state.appliedJobs = [];
       })
       .addCase(getApplliedJobs.fulfilled, (state, { payload }) => {
         state.status = "idle";
@@ -213,7 +265,7 @@ const jobSlice = createSlice({
       .addCase(getApplliedJobs.rejected, (state, { payload }) => {
         state.status = "idle";
         state.error = payload;
-        state.appliedJobs = null;
+        state.appliedJobs = [];
       })
 
       // get jobs applied details

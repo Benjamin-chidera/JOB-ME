@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldUploadWidget, CloudinaryUploadWidgetResults } from "next-cloudinary";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { postJobs } from "@/redux/app/jobSlice";
 import { useSession } from "next-auth/react";
+import { useAppDispatch } from "@/redux/store/hooks";
+
 
 type postJobType = {
   positions: string;
@@ -28,7 +30,7 @@ const PostJobs = () => {
     formState: { errors },
   } = useForm<postJobType>();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
   // console.log(session?.user?.id);
@@ -143,8 +145,10 @@ const PostJobs = () => {
               <CldUploadWidget
                 uploadPreset="JOBME-jobs"
                 options={{ sources: ["local"] }}
-                onUpload={(result) => {
-                  setCompanyImageUrl(result?.info?.secure_url);
+                onUpload={(result: CloudinaryUploadWidgetResults) => {
+                  if (result.info && typeof result.info !== "string") {
+                    setCompanyImageUrl(result.info.secure_url);
+                  }
                 }}
               >
                 {({ open }) => {

@@ -14,8 +14,7 @@ export const POST = async (req: NextRequest) => {
 
     const [result] = await db.query(q, values);
 
-    const replyMessage =
-      `Thank you for contacting JOBME ${name} with the email ${email} and phone number ${phonenumber}. We will get be to you immediately.` ;
+    const replyMessage = `Thank you for contacting JOBME ${name} with the email ${email} and phone number ${phonenumber}. We will get be to you immediately.`;
     const subjects = subject;
     const messages = ` Your message ${message}. => Our Message: ${replyMessage}`;
     const send_to = email;
@@ -29,6 +28,13 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (error) {
     console.log("Error:", error);
-    return NextResponse.json({ err: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ err: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json(
+        { err: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 };

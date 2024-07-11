@@ -11,6 +11,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { contactUs } from "@/redux/app/authSlice";
 import { ContactModal } from "@/components/modals/ContactModal";
+import { useAppDispatch } from "@/redux/store/hooks";
 
 type contactTypes = {
   name: string;
@@ -28,7 +29,7 @@ const Contact = () => {
 
     formState: { errors },
   } = useForm<contactTypes>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmitContact: SubmitHandler<contactTypes> = (form) => {

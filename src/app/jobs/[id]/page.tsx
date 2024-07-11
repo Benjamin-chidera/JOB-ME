@@ -11,50 +11,50 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
-import { applyJobs, getAllJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
+import {
+  applyJobs,
+  getAllJobs,
+  getEmployerJobsDetails,
+} from "@/redux/app/jobSlice";
 import { format } from "timeago.js";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormatCurrency } from "@/libs/FormatCurrency";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+
+interface EmployerJobDetail {
+  responsibilities?: string; // Change to string
+  skills?: string; // Change to string
+  positions: string;
+  companyImage: string;
+  description: string;
+  jobType: string;
+  country: string;
+  created_at: string;
+  experience: number;
+  salary: number;
+  id: string;
+}
+
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const dispatch = useDispatch();
-  const { employerJobsDetail, allJobs } = useSelector((state) => state.jobs);
+  const dispatch = useAppDispatch();
+  const { employerJobsDetail, allJobs } = useAppSelector((state) => state.jobs);
 
   const { data: session } = useSession();
   const [hasApplied, setHasApplied] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(getEmployerJobsDetails(id));
     dispatch(getAllJobs());
   }, [id]);
 
-  const responsibilities = employerJobsDetail?.responsibilities
-    ? JSON.parse(employerJobsDetail?.responsibilities)
-    : [];
-  const skills = employerJobsDetail?.skills
-    ? JSON.parse(employerJobsDetail?.skills)
-    : [];
-
-  // console.log(employerJobsDetail);
-  // console.log(allJobs);
-
-  const isRelated = allJobs.filter(
-    (job) => job.positions === employerJobsDetail.positions
-  );
-
-  
-  const sliceRelatedJobs = isRelated?.slice(0, 3)
-  console.log({ sliceRelatedJobs });
-
-  // apply for a job
-
   useEffect(() => {
     const checkApplicationStatus = async () => {
-      if (session?.user?.id) {
-        // Check local storage first
-        const localStorageKey = `application_${session.user.id}_${employerJobsDetail?.id}`;
+      if (session?.user?.id && employerJobsDetail?.id) {
+        const localStorageKey = `application_${session.user.id}_${employerJobsDetail.id}`;
         const localStorageStatus = localStorage.getItem(localStorageKey);
 
         if (localStorageStatus) {
@@ -66,7 +66,6 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
             );
             const data = await response.json();
             setHasApplied(data.applied);
-            // Save to local storage
             localStorage.setItem(localStorageKey, JSON.stringify(data.applied));
           } catch (error) {
             console.error("Failed to check application status:", error);
@@ -78,110 +77,123 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
     checkApplicationStatus();
   }, [session?.user?.id, employerJobsDetail?.id]);
 
-  const router = useRouter();
+  const responsibilities: string[] = employerJobsDetail?.responsibilities
+    ? JSON.parse(employerJobsDetail.responsibilities)
+    : [];
+
+  const skills: string[] = employerJobsDetail?.skills
+    ? JSON.parse(employerJobsDetail.skills)
+    : [];
+
+  const isRelated = allJobs.filter(
+    (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
+  );
+
+  const sliceRelatedJobs = isRelated?.slice(0, 3);
+
+  const createdDate = employerJobsDetail?.created_at
+    ? new Date(employerJobsDetail.created_at)
+    : new Date();
+  const experience = employerJobsDetail?.experience ?? 0;
+  const salary = employerJobsDetail?.salary ?? 0;
 
   return (
-    <main className=" mt-10">
+    <main className="mt-10">
       <section className="lg:flex justify-center gap-14 mb-10 w-11/12 mx-auto">
         <section>
-          <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
+          <div className="bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
             <Image
-              src={employerJobsDetail?.companyImage}
+              src={employerJobsDetail?.companyImage || ""}
               alt="company-logo"
               width={40}
               height={40}
               className="w-10 h-10 shadow-lg"
             />
-            <h2 className=" font-semibold text-2xl mt-3">
+            <h2 className="font-semibold text-2xl mt-3">
               {employerJobsDetail?.positions}
             </h2>
-            <p className=" max-w-md my-3">{employerJobsDetail?.description}</p>
+            <p className="max-w-md my-3">{employerJobsDetail?.description}</p>
 
-            <p className=" mt-10 font-semibold text-xl">Job Information:</p>
+            <p className="mt-10 font-semibold text-xl">Job Information:</p>
 
-            <section className=" bg-white shadow-xl p-5 w-fit mt-3 rounded-xl border-2 flex flex-col gap-2">
-              <p className=" font-semibold flex items-center gap-2">
+            <section className="bg-white shadow-xl p-5 w-fit mt-3 rounded-xl border-2 flex flex-col gap-2">
+              <p className="font-semibold flex items-center gap-2">
                 <span>
                   <CiUser size={20} />
                 </span>{" "}
                 Employment Type:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
                   {employerJobsDetail?.jobType}
                 </span>
               </p>
 
-              <p className=" font-semibold flex items-center gap-2">
+              <p className="font-semibold flex items-center gap-2">
                 <span>
                   <IoLocationOutline size={20} />
                 </span>{" "}
                 Location:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
                   {employerJobsDetail?.country}
                 </span>
               </p>
 
-              <p className=" font-semibold flex items-center gap-2">
+              <p className="font-semibold flex items-center gap-2">
                 <span>
                   <CiClock2 size={20} />
                 </span>{" "}
                 Date Posted:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
-                  {format(employerJobsDetail?.created_at)}
+                  {format(createdDate)}
                 </span>
               </p>
 
-              <p className=" font-semibold flex items-center gap-2">
+              <p className="font-semibold flex items-center gap-2">
                 <span>
                   <GoBriefcase size={20} />
                 </span>{" "}
                 Experience:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
                   {employerJobsDetail?.experience}{" "}
-                  {employerJobsDetail?.experience > 2 ? "Year" : "Years"}
+                  {experience > 2 ? "Year" : "Years"}
                 </span>
               </p>
 
-              <p className=" font-semibold flex items-center gap-2">
+              <p className="font-semibold flex items-center gap-2">
                 <span>
                   <BsCurrencyDollar size={20} />
                 </span>{" "}
                 Salary:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
-                  {FormatCurrency(employerJobsDetail?.salary, "USD")}
+                  {FormatCurrency(salary, "USD")}
                 </span>
               </p>
             </section>
           </div>
 
-          <div className=" mt-4">
+          <div className="mt-4">
             <Image
-              src={map}
+              src={map || ""}
               alt="map"
-              className=" w-[500px] max-w-full h-[400px] object-cover rounded-xl"
+              className="w-[500px] max-w-full h-[400px] object-cover rounded-xl"
             />
           </div>
         </section>
+
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
-          <h2 className=" font-semibold text-2xl">Job Description:</h2>
+          <h2 className="font-semibold text-2xl">Job Description:</h2>
           <p className="max-w-4xl my-5">{employerJobsDetail?.description}</p>
 
-          <section className=" mt-10">
-            {/*   Duties & Responsibilities: */}
-            <h2 className=" font-semibold text-2xl">
+          <section className="mt-10">
+            <h2 className="font-semibold text-2xl">
               Duties & Responsibilities:
             </h2>
 
-            <div className=" mt-5">
-              <ul className=" space-y-3">
+            <div className="mt-5">
+              <ul className="space-y-3">
                 {responsibilities.map((item, index) => (
                   <li
                     key={index}
-                    className=" flex md:items-center gap-2 font-[500]"
+                    className="flex md:items-center gap-2 font-[500]"
                   >
                     <span>
                       <IoIosCheckmarkCircle color="#0DCAF0" size={24} />
@@ -193,17 +205,14 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
             </div>
           </section>
 
-          <section className=" mt-10">
-            {/*  Skills & Qualifications: */}
-            <h2 className=" font-semibold text-2xl">
-              Skills & Qualifications:
-            </h2>
-            <div className=" mt-5">
-              <ul className=" space-y-3">
-                {skills.map((item: any, index: any) => (
+          <section className="mt-10">
+            <h2 className="font-semibold text-2xl">Skills & Qualifications:</h2>
+            <div className="mt-5">
+              <ul className="space-y-3">
+                {skills.map((item, index) => (
                   <li
                     key={index}
-                    className=" flex md:items-center gap-2 font-[500]"
+                    className="flex md:items-center gap-2 font-[500]"
                   >
                     <span>
                       <IoIosCheckmarkCircle color="#0DCAF0" size={24} />
@@ -214,15 +223,15 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
               </ul>
             </div>
           </section>
+
           <div className="mt-2">
             {session?.user?.role !== "employer" && (
               <button
                 className={`text-[16px] py-2 px-3 text-white rounded-lg ${
                   hasApplied ? "bg-gray-400 cursor-not-allowed" : "bg-[#0DCAF0]"
                 }`}
-                // onClick={handleApplyForJob}
                 onClick={() =>
-                  router.push(`/jobs/${employerJobsDetail.id}/application`)
+                  router.push(`/jobs/${employerJobsDetail?.id}/application`)
                 }
                 disabled={hasApplied}
               >
@@ -233,17 +242,17 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </section>
       </section>
 
-      <section className=" mt-24 mb-10">
-        <div className=" text-center">
-          <h2 className=" font-semibold text-xl">Related Jobs</h2>
-          <p className=" font-medium">
+      <section className="mt-24 mb-10">
+        <div className="text-center">
+          <h2 className="font-semibold text-xl">Related Jobs</h2>
+          <p className="font-medium">
             Lorem ipsum dolor sit amet consectetur. Risus tempus eget egestas
             dolor ut. At interdum amet id duis pulvinar quis massa elit. Amet
             quam commodo est pulvinar vitae.
           </p>
         </div>
 
-        <div className=" mt-10">
+        <div className="mt-10">
           <RelatedJobs sliceRelatedJobs={sliceRelatedJobs} />
         </div>
       </section>

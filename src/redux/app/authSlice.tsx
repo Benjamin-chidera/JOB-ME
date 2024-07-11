@@ -1,24 +1,40 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const registerUser = createAsyncThunk(
+
+export interface RegisterFormData {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phonenumber: string;
+  subject: string;
+  message: string;
+
+}
+
+export const registerUser = createAsyncThunk<any, RegisterFormData>(
   "user/registerUser",
-  async (formData, { rejectWithValue }) => {
+  async (formData: RegisterFormData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/signup",
         formData
       );
-
       return data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error);
     }
   }
 );
 
-export const contactUs = createAsyncThunk(
+export const contactUs = createAsyncThunk<any, ContactFormData>(
   "user/contactUs",
   async (form, { rejectWithValue }) => {
     try {

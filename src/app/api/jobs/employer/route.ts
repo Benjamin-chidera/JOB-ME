@@ -17,7 +17,14 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(rows, { status: 200 });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+     console.log("Error:", error);
+     if (error instanceof Error) {
+       return NextResponse.json({ err: error.message }, { status: 500 });
+     } else {
+       return NextResponse.json(
+         { err: "An unknown error occurred" },
+         { status: 500 }
+       );
+     }
   }
 };
