@@ -1,11 +1,11 @@
 
 import { connect } from "@/libs/connect";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
-export const authOptions: NextAuthOptions = {
+ const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
