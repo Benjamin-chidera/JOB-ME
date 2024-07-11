@@ -6,7 +6,10 @@ type ContactModalProps = {
   onClose: () => void;
 };
 
-export const ContactModal = ({ isOpen, onClose }) => {
+export const ContactModal: React.FC<ContactModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   return (
     <main>
       {isOpen && (

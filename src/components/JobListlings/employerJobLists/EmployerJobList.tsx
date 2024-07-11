@@ -7,7 +7,7 @@ import Link from "next/link";
 import { format } from "timeago.js";
 import { useSession } from "next-auth/react";
 
-export const EmployerJobList = ({ j }) => {
+export const EmployerJobList = ({ j }: any) => {
   return (
     <main className=" mx-5 border lg:border-0 m-2 px-2 rounded-lg">
       <Link

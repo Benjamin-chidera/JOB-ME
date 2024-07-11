@@ -14,9 +14,10 @@ import { useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 export default function Home() {
-  const { allJobs } = useSelector((state) => state.jobs);
+  const { allJobs } = useAppSelector((state) => state.jobs);
   const [jobType, setJobType] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [position, setPosition] = useState("");

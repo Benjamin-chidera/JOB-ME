@@ -5,10 +5,11 @@ import { JobLists } from "@/components/JobListlings/JobsList/JobLists";
 import { getEmployerJobs } from "@/redux/app/jobSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 const Employer = () => {
-  const dispatch = useDispatch();
-  const { employerJobs } = useSelector((state) => state.jobs);
+  const dispatch = useAppDispatch();
+  const { employerJobs } = useAppSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getEmployerJobs());

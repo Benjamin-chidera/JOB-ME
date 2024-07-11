@@ -28,4 +28,4 @@ export const MyPdf = ({ applicantJobDetails }: any) => {
   );
 };
 
-await renderToFile(<MyPdf />, `${__dirname}/${applicantJobDetails.resume}`);
+// await renderToFile(<MyPdf />, `${__dirname}/${applicantJobDetails.resume}`);

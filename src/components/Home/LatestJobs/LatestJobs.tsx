@@ -14,42 +14,10 @@ import { IoLocationOutline } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 import { FormatCurrency } from "@/libs/FormatCurrency";
 import Link from "next/link";
-
-const jobs = [
-  {
-    id: 1,
-    position: "Digital Marketer",
-    time: "24 hours ago",
-    mode: "full time",
-    company: "Google",
-    location: "United Kingdom",
-    salary: "30k - 35k",
-    logo: insta,
-  },
-  {
-    id: 2,
-    position: "Web developer",
-    time: "2 days ago",
-    mode: "full time",
-    company: "Facebook",
-    location: "Australia",
-    salary: "30k - 40k",
-    logo: fb,
-  },
-  {
-    id: 3,
-    position: "UI/UX Designer",
-    time: "3 hours ago",
-    mode: "remote",
-    company: "LinkedIn",
-    location: "South Africa",
-    salary: "28k - 34k",
-    logo: lk,
-  },
-];
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 export const LatestJobs = () => {
-  const { allJobs } = useSelector((state) => state.jobs);
+  const { allJobs } = useAppSelector((state) => state.jobs);
 
   const getThree = allJobs?.slice(0, 6);
   console.log(getThree);
@@ -71,7 +39,7 @@ export const LatestJobs = () => {
         {getThree?.map((job) => (
           <div key={job.id} className="w-[300px] border rounded-xl text-start">
             <div className="p-5">
-              <Link href={`/jobs/${job.id}`} >
+              <Link href={`/jobs/${job.id}`}>
                 <h2 className=" font-semibold text-xl">{job.positions}</h2>
 
                 <p className=" text-gray-400 mt-2 flex items-center gap-1">

@@ -16,17 +16,18 @@ export interface PostJobData {
 }
 
 interface ApplyJobData {
+  resume: string;
+  userId: string;
+  jobId: string;
   firstname: string;
   lastname: string;
   email: string;
   phonenumber: string;
   coverletter: string;
-  resume: string;
-  userId: string;
-  jobId: string;
 }
 
 interface EmployerJobDetail {
+  companyName: any;
   responsibilities: string[];
   skills: string[];
   positions: string;
@@ -39,6 +40,12 @@ interface EmployerJobDetail {
   salary: number;
   id: string;
   // Add other properties as needed
+}
+
+interface RootState {
+  jobs: {
+    appliedJobs: any[]; // Or a more specific type if you know the structure
+  };
 }
 
 export const postJobs = createAsyncThunk<any, PostJobData>(
@@ -107,9 +114,9 @@ export const applyJobs = createAsyncThunk<any, ApplyJobData>(
   }
 );
 
-export const getApplliedJobs = createAsyncThunk(
+export const getApplliedJobs = createAsyncThunk<any, string>(
   "jobs/getApplliedJobs",
-  async (userId, { rejectWithValue }) => {
+  async (userId: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
         `http://localhost:3000/api/jobs/apply/applied?jobId=${userId}`
@@ -122,9 +129,9 @@ export const getApplliedJobs = createAsyncThunk(
   }
 );
 
-export const getApplicantJobDetails = createAsyncThunk(
+export const getApplicantJobDetails = createAsyncThunk<any, string>(
   "jobs/getApplicantJobDetails",
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
         `http://localhost:3000/api/jobs/apply/applied/details?jobId=${id}`

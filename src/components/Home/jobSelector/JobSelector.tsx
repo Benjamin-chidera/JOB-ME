@@ -5,6 +5,7 @@ import "../jobSelector/jobSelector.css";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllJobs } from "@/redux/app/jobSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type searchType = {
   jobType: string;
@@ -30,13 +31,13 @@ export const JobSelector = ({
   handleSearch,
 }: searchType) => {
   const pathname = usePathname();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getAllJobs());
   }, []);
 
-  const { allJobs } = useSelector((state) => state.jobs);
+  const { allJobs } = useAppSelector((state) => state.jobs);
 
   const uniqueCompanies = Array.from(
     new Set(allJobs.map((job) => job.companyName))

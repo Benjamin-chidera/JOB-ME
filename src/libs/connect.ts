@@ -2,7 +2,8 @@ import mysql from "mysql2/promise";
 
 export async function connect() {
   const connection = mysql.createPool({
-    port: "localhost",
+    host: "localhost",
+    port: 3306, // Default MySQL port, change if yours is different
     user: "root",
     password: "STANDOUT12345",
     database: "jobme",

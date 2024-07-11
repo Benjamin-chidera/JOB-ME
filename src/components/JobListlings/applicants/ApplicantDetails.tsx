@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -12,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { applyJobs } from "@/redux/app/jobSlice";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type jobsType = {
   j: {
@@ -27,7 +27,7 @@ type jobsType = {
 };
 
 export const ApplicantDetail = ({ j }: jobsType) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const [hasApplied, setHasApplied] = useState(false);
 
@@ -59,23 +59,30 @@ export const ApplicantDetail = ({ j }: jobsType) => {
     checkApplicationStatus();
   }, [session?.user?.id, j.id]);
 
-  const handleApplyForJob = async () => {
-    if (session?.user?.id && !hasApplied) {
-      const form = {
-        userId: session.user.id,
-        jobId: j.id,
-      };
-      try {
-        await dispatch(applyJobs(form));
-        setHasApplied(true);
-        // Update local storage
-        const localStorageKey = `application_${session.user.id}_${j.id}`;
-        localStorage.setItem(localStorageKey, JSON.stringify(true));
-      } catch (error) {
-        console.error("Failed to apply for job:", error);
-      }
-    }
-  };
+//  const handleApplyForJob = async () => {
+//    if (session?.user?.id && !hasApplied) {
+//      const form: ApplyJobData = {
+//        userId: session.user.id,
+//        jobId: j.id,
+//        // Add other required fields here
+//        resume: "", // Add appropriate value
+//        firstname: "", // Add appropriate value
+//        lastname: "", // Add appropriate value
+//        email: "", // Add appropriate value
+//        phonenumber: "", // Add appropriate value
+//        coverletter: "", // Add appropriate value
+//      };
+//      try {
+//        await dispatch(applyJobs(form));
+//        setHasApplied(true);
+//        // Update local storage
+//        const localStorageKey = `application_${session.user.id}_${j.id}`;
+//        localStorage.setItem(localStorageKey, JSON.stringify(true));
+//      } catch (error) {
+//        console.error("Failed to apply for job:", error);
+//      }
+//    }
+//  };
 
   const router = useRouter();
 

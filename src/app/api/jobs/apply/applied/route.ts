@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest) => {
         ORDER BY a.applied_at DESC
       `;
       const [results] = await db.query(query, [jobId]);
-      return NextResponse.json({ applicants: results }, { status: 200 });
+      return NextResponse.json({results }, { status: 200 });
     }
   } catch (error) {
     console.log(error);

@@ -1,6 +1,9 @@
-export const FormatCurrency = (amount: string, currency: string, locale = "en-US") => {
-  return new Intl.NumberFormat(locale, {
+// In your FormatCurrency.ts file
+export const FormatCurrency = (amount: number | string, currency: string) => {
+  const numericAmount =
+    typeof amount === "string" ? parseFloat(amount) : amount;
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currency,
-  }).format(amount);
+  }).format(numericAmount);
 };

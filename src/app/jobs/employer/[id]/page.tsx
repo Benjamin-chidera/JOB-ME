@@ -13,32 +13,54 @@ import { RelatedJobs } from "@/components/JobListlings/relatedJobs/RelatedJobs";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllJobs, getEmployerJobsDetails } from "@/redux/app/jobSlice";
 import { format } from "timeago.js";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+
+interface EmployerJobDetail {
+  responsibilities?: string | string[]; // Update to handle both string and string[]
+  skills?: string | string[]; // Update to handle both string and string[]
+  positions: string;
+  companyImage: string;
+  description: string;
+  jobType: string;
+  country: string;
+  created_at: string;
+  experience: number;
+  salary: number;
+  id: string;
+}
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const dispatch = useDispatch();
-  const { employerJobsDetail, allJobs } = useSelector((state) => state.jobs);
+  const dispatch = useAppDispatch();
+  const { employerJobsDetail, allJobs } = useAppSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getEmployerJobsDetails(id));
     dispatch(getAllJobs());
   }, [id]);
 
-  const responsibilities = employerJobsDetail?.responsibilities
-    ? JSON.parse(employerJobsDetail?.responsibilities)
-    : [];
-  const skills = employerJobsDetail?.skills
-    ? JSON.parse(employerJobsDetail?.skills)
-    : [];
+  const responsibilities: string[] = Array.isArray(
+    employerJobsDetail?.responsibilities
+  )
+    ? employerJobsDetail.responsibilities
+    : [employerJobsDetail?.responsibilities || ""];
 
-  // console.log(employerJobsDetail);
+  const skills: string[] = Array.isArray(employerJobsDetail?.skills)
+    ? employerJobsDetail.skills
+    : [employerJobsDetail?.skills || ""];
 
   const isRelated = allJobs.filter(
-    (job) => job.positions === employerJobsDetail.positions
+    (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
   );
 
   const sliceRelatedJobs = isRelated?.slice(0, 3);
   // console.log({ sliceRelatedJobs });
+
+  const createdDate = employerJobsDetail?.created_at
+    ? new Date(employerJobsDetail.created_at)
+    : new Date();
+  const experience = employerJobsDetail?.experience ?? 0;
+  const salary = employerJobsDetail?.salary ?? 0;
 
   return (
     <main className=" mt-10">
@@ -46,7 +68,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         <section>
           <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
             <Image
-              src={employerJobsDetail?.companyImage}
+              src={employerJobsDetail?.companyImage || ""}
               alt="company-logo"
               width={40}
               height={40}
@@ -89,7 +111,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 Date Posted:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {format(employerJobsDetail?.created_at)}
+                  {format(createdDate)}
                 </span>
               </p>
 
@@ -99,9 +121,8 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 </span>{" "}
                 Experience:{" "}
                 <span className="text-blue-300 font-medium">
-                  {" "}
                   {employerJobsDetail?.experience}{" "}
-                  {employerJobsDetail?.experience > 2 ? "Year" : "Years"}
+                  {experience > 2 ? "Year" : "Years"}
                 </span>
               </p>
 

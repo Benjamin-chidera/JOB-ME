@@ -1,5 +1,18 @@
 "use client";
 
+// Define RootState interface in a store file (e.g., store/index.ts)
+// Ensure this matches your actual state structure
+export interface RootState {
+  jobs: {
+    applicantJobDetails: any; // Adjust type as needed
+    allJobs: any[]; // Adjust type as needed
+    // Add other state properties here as needed
+  };
+  // Add other slice states here as needed
+}
+
+// Modify your component to use RootState and proper useSelector typing
+
 import React, { useEffect, useState } from "react";
 import map from "../../../../../../public/map.png";
 import Image from "next/image";
@@ -23,18 +36,19 @@ import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 // import "@cyntler/react-doc-viewer/dist/index.css";
 import { PDFViewer } from "@react-pdf/renderer";
 import { MyPdf } from "@/components/pdf/MyPdf";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
-const ApplicantsDetails = ({ params }) => {
+const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const { applicantJobDetails, allJobs } = useSelector((state) => state.jobs);
-  const dispatch = useDispatch();
+  const { applicantJobDetails, allJobs } = useAppSelector(
+    (state: RootState) => state.jobs
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getApplicantJobDetails(id));
     dispatch(getAllJobs());
-  }, [id]);
-
-  // console.log(applicantJobDetails?.resume);
+  }, [id, dispatch]);
 
   const isRelated = allJobs.filter(
     (job) => job?.positions === applicantJobDetails?.positions
@@ -42,6 +56,9 @@ const ApplicantsDetails = ({ params }) => {
 
   const sliceRelatedJobs = isRelated?.slice(0, 3);
   console.log({ sliceRelatedJobs });
+
+  console.log(applicantJobDetails);
+  
 
   return (
     <main className=" mt-10">

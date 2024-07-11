@@ -5,26 +5,45 @@ import "./jobs.css";
 import { JobSelector } from "../../components/Home/jobSelector/JobSelector";
 import { JobLists } from "../../components/JobListlings/JobsList/JobLists";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+
+interface Job {
+  id: string;
+  companyImage: string;
+  positions: string;
+  companyName: string;
+  created_at: string;
+  country: string;
+  salary: string;
+  jobType: string;
+}
 
 const Jobs = () => {
   const [jobType, setJobType] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [position, setPosition] = useState("");
   const [country, setCountry] = useState("");
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   const fetchJobs = async (filters = {}) => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/jobs", {
-        params: filters,
-      });
-      setJobs(data);
+      const { data } = await axios.get<Job[]>(
+        "http://localhost:3000/api/jobs",
+        {
+          params: filters,
+        }
+      );
+      const jobsWithStringId = data.map((job) => ({
+        ...job,
+        id: job.id.toString(), // Convert id to string
+      }));
+      setJobs(jobsWithStringId);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSearch = async (e: any) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const filters = { jobType, companyName, position, country };
     fetchJobs(filters);
@@ -53,8 +72,22 @@ const Jobs = () => {
       </section>
 
       <section className="mt-10">
-        {jobs?.map((j) => (
-          <JobLists key={j.id} j={j} />
+        {jobs.map((j) => (
+          <JobLists
+            key={j.id}
+            j={
+              j as {
+                id: string;
+                companyImage: string;
+                positions: string;
+                companyName: string;
+                created_at: string;
+                country: string;
+                salary: string;
+                jobType: string;
+              }
+            }
+          />
         ))}
         {/* pagination */}
       </section>

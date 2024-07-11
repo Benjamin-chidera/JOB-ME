@@ -12,6 +12,7 @@ import { applyJobs } from "@/redux/app/jobSlice";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormatCurrency } from "@/libs/FormatCurrency";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type jobsType = {
   j: {
@@ -27,9 +28,12 @@ type jobsType = {
 };
 
 export const JobLists = ({ j }: jobsType) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const [hasApplied, setHasApplied] = useState(false);
+
+  // console.log({ userId: session?.user?.id, jobId: j.id });
+  
 
   useEffect(() => {
     const checkApplicationStatus = async () => {
@@ -59,23 +63,23 @@ export const JobLists = ({ j }: jobsType) => {
     checkApplicationStatus();
   }, [session?.user?.id, j.id]);
 
-  const handleApplyForJob = async () => {
-    if (session?.user?.id && !hasApplied) {
-      const form = {
-        userId: session.user.id,
-        jobId: j.id,
-      };
-      try {
-        await dispatch(applyJobs(form));
-        setHasApplied(true);
-        // Update local storage
-        const localStorageKey = `application_${session.user.id}_${j.id}`;
-        localStorage.setItem(localStorageKey, JSON.stringify(true));
-      } catch (error) {
-        console.error("Failed to apply for job:", error);
-      }
-    }
-  };
+  // const handleApplyForJob = async () => {
+  //   if (session?.user?.id && !hasApplied) {
+  //     const form = {
+  //       userId: session.user.id,
+  //       jobId: j.id,
+  //     };
+  //     try {
+  //       await dispatch(applyJobs(form));
+  //       setHasApplied(true);
+  //       // Update local storage
+  //       const localStorageKey = `application_${session.user.id}_${j.id}`;
+  //       localStorage.setItem(localStorageKey, JSON.stringify(true));
+  //     } catch (error) {
+  //       console.error("Failed to apply for job:", error);
+  //     }
+  //   }
+  // };
 
   const router = useRouter();
 

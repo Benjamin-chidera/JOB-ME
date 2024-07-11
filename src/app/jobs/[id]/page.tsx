@@ -23,8 +23,8 @@ import { FormatCurrency } from "@/libs/FormatCurrency";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 interface EmployerJobDetail {
-  responsibilities?: string; // Change to string
-  skills?: string; // Change to string
+  responsibilities?: string | string[]; // Update to handle both string and string[]
+  skills?: string | string[]; // Update to handle both string and string[]
   positions: string;
   companyImage: string;
   description: string;
@@ -35,6 +35,7 @@ interface EmployerJobDetail {
   salary: number;
   id: string;
 }
+
 
 
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
@@ -77,13 +78,16 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
     checkApplicationStatus();
   }, [session?.user?.id, employerJobsDetail?.id]);
 
-  const responsibilities: string[] = employerJobsDetail?.responsibilities
-    ? JSON.parse(employerJobsDetail.responsibilities)
-    : [];
+const responsibilities: string[] = Array.isArray(
+  employerJobsDetail?.responsibilities
+)
+  ? employerJobsDetail.responsibilities
+  : [employerJobsDetail?.responsibilities || ""];
 
-  const skills: string[] = employerJobsDetail?.skills
-    ? JSON.parse(employerJobsDetail.skills)
-    : [];
+const skills: string[] = Array.isArray(employerJobsDetail?.skills)
+  ? employerJobsDetail.skills
+  : [employerJobsDetail?.skills || ""];
+
 
   const isRelated = allJobs.filter(
     (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
@@ -158,13 +162,10 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
                 </span>
               </p>
 
-              <p className="font-semibold flex items-center gap-2">
-                <span>
-                  <BsCurrencyDollar size={20} />
-                </span>{" "}
+              <p className="text-sm text-gray-400">
                 Salary:{" "}
                 <span className="text-blue-300 font-medium">
-                  {FormatCurrency(salary, "USD")}
+                  {FormatCurrency(String(salary), "USD")}
                 </span>
               </p>
             </section>
