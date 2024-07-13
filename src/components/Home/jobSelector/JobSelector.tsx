@@ -40,21 +40,21 @@ export const JobSelector = ({
   const { allJobs } = useAppSelector((state) => state.jobs);
 
   const uniqueCompanies = Array.from(
-    new Set(allJobs.map((job) => job.companyName))
+    new Set(allJobs?.map((job) => job.companyName))
   );
 
   const uniqueCountries = Array.from(
-    new Set(allJobs.map((job) => job.country))
+    new Set(allJobs?.map((job) => job.country))
   );
 
   const uniquePositions = Array.from(
-    new Set(allJobs.map((job) => job.positions))
+    new Set(allJobs?.map((job) => job.positions))
   );
 
   return (
     <main>
       <form
-        className={`lg:h-32 py-3 w-full ${
+        className={`lg:h-28 py-2 w-full ${
           pathname === "/" && "job"
         } rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 flex flex-wrap items-center justify-center gap-2 md:gap-8 p-2 md:p-5 lg:p-0 ${
           pathname === "/" && "mt-40"
@@ -63,7 +63,7 @@ export const JobSelector = ({
       >
         {/* job type */}
         <select
-          className="select select-bordered w-32 md:w-48 max-w-xs"
+          className="select select-bordered w-36 max-w-xs"
           value={jobType}
           onChange={(e) => setJobType(e.target.value)}
         >
@@ -79,7 +79,7 @@ export const JobSelector = ({
 
         {/* industry type */}
         <select
-          className="select select-bordered w-48 max-w-xs"
+          className="select select-bordered w-36 max-w-xs"
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
         >
@@ -93,7 +93,7 @@ export const JobSelector = ({
 
         {/* mode of work */}
         <select
-          className="select select-bordered w-40 md:w-52 max-w-xs"
+          className="select select-bordered w-36 max-w-xs"
           value={position}
           onChange={(e) => setPosition(e.target.value)}
         >
@@ -107,7 +107,7 @@ export const JobSelector = ({
 
         {/* location */}
         <select
-          className="select select-bordered w-32 lg:w-48 max-w-xs"
+          className="select select-bordered w-36 max-w-xs"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         >

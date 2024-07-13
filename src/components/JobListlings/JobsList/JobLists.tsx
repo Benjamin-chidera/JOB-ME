@@ -84,8 +84,8 @@ export const JobLists = ({ j }: jobsType) => {
   const router = useRouter();
 
   return (
-    <main className=" mx-5 border lg:border-0 m-2 px-2 rounded-lg">
-      <section className="lg:w-[1020px] mx-auto lg:border mb-4 md:h-[100px] p-5 md:flex justify-between items-center rounded-lg lg:shadow-lg">
+    <main className=" border lg:border-0 m-2 px-2 rounded-lg">
+      <section className="lg:w-10/12 mx-auto lg:border mb-4 md:h-[100px] p-5 md:flex justify-between items-center rounded-lg lg:shadow-lg">
         <Link
           href={`/jobs/${j.id}`}
           className="flex items-center gap-5 flex-1 mb-2 lg:mb-0"

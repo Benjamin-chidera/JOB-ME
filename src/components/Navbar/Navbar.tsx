@@ -31,7 +31,7 @@ export const Navbar = () => {
 
   return (
     <main
-      className={`w-11/12 mx-auto flex items-center justify-between h-18 lg:h-20 `}
+      className={`w-10/12 mx-auto flex items-center justify-between h-18 lg:h-20 `}
     >
       <Link href={"/"}>
         <Image src={logo} width={100} height={100} alt="Company-logo" />

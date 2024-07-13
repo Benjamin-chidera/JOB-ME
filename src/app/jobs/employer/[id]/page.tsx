@@ -64,7 +64,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
 
   return (
     <main className=" mt-10">
-      <section className="lg:flex justify-center gap-14 mb-10 w-11/12 mx-auto">
+      <section className="lg:flex justify-between gap-7 mb-10 w-10/12 mx-auto">
         <section>
           <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
             <Image
@@ -199,7 +199,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </section>
       </section>
 
-      <section className=" mt-24 mb-10">
+      <section className=" mt-24 mb-10 w-10/12 mx-auto">
         <div className=" text-center">
           <h2 className=" font-semibold text-xl">Related Jobs</h2>
           <p className=" font-medium">

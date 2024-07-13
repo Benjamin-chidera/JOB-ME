@@ -33,7 +33,7 @@ export const Footer = () => {
     <main className="mb-7 mx-5">
       <div className=" bg-gray-500 h-0.5 w-full max-w-full" />
 
-      <section className="w-11/12 my-10 mx-auto lg:flex items-center justify-between">
+      <section className="w-10/12 my-10 mx-auto lg:flex items-center justify-between">
         <div>
           <Image src={logo} width={100} height={100} alt="Company-logo" />
 

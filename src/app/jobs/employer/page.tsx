@@ -16,7 +16,7 @@ const Employer = () => {
   }, []);
 
   return (
-    <main className=" w-11/12 mx-auto mb-10">
+    <main className=" w-full mx-auto mb-10">
       {employerJobs.map((j) => (
         <EmployerJobList key={j.id} j={j} />
       ))}

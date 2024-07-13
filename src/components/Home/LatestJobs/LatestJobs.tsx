@@ -35,7 +35,7 @@ export const LatestJobs = () => {
         vitae nisl imperdiet auctor mattis viverra egestas mattis.
       </p>
 
-      <section className=" mt-10 grid md:grid-cols-3 place-items-center w-[950px] items-center flex-wrap mx-auto gap-10">
+      <section className=" mt-10 grid md:grid-cols-3 place-items-center w-10/12 items-center flex-wrap mx-auto gap-10">
         {getThree?.map((job) => (
           <div key={job.id} className="w-[300px] border rounded-xl text-start">
             <div className="p-5">

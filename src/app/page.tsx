@@ -17,7 +17,7 @@ import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 export default function Home() {
-  const { allJobs } = useAppSelector((state) => state.jobs);
+  // const { allJobs } = useAppSelector((state) => state.jobs);
   const [jobType, setJobType] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [position, setPosition] = useState("");
@@ -54,14 +54,14 @@ export default function Home() {
   // console.log(allJobs);
 
   return (
-    <main className=" pb-10">
+    <main className=" pb-10 ">
       <div className="hero">
         {/* hero img */}
         <p className=" text-white text-2xl  max-w-sm mx-auto text-center mb-20">
           FIND JOBS AND HIRE AMAZING TALENTS!
         </p>
 
-        <div className="w-full">
+        <div className=" mx-auto w-10/12">
           <JobSelector
             jobType={jobType}
             setJobType={setJobType}
@@ -77,7 +77,7 @@ export default function Home() {
       </div>
 
       <section className="  bg-[#F5F3F3]">
-        <div className=" py-10 w-11/12 mx-auto">
+        <div className=" py-10  w-10/12 mx-auto">
           <div className="md:flex items-center justify-center gap-32">
             <div className="relative flex justify-center">
               <Image
@@ -160,7 +160,7 @@ export default function Home() {
         <Image
           src={work}
           alt="Vector"
-          className="w-11/12 mx-auto lg:w-[1020px]"
+          className=" w-10/12 mx-auto lg:w-[1020px]"
         />
       </section>
 

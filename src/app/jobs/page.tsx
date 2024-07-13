@@ -58,17 +58,19 @@ const Jobs = () => {
       <div className="col h-14 w-full"></div>
 
       <section className="jobsSelector lg:h-32 w-full flex items-center justify-center">
-        <JobSelector
-          jobType={jobType}
-          setJobType={setJobType}
-          companyName={companyName}
-          setCompanyName={setCompanyName}
-          position={position}
-          setPosition={setPosition}
-          country={country}
-          setCountry={setCountry}
-          handleSearch={handleSearch}
-        />
+        <div className=" w-10/12 mx-auto">
+          <JobSelector
+            jobType={jobType}
+            setJobType={setJobType}
+            companyName={companyName}
+            setCompanyName={setCompanyName}
+            position={position}
+            setPosition={setPosition}
+            country={country}
+            setCountry={setCountry}
+            handleSearch={handleSearch}
+          />
+        </div>
       </section>
 
       <section className="mt-10">
