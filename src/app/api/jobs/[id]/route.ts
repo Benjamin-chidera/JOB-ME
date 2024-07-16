@@ -1,15 +1,6 @@
-import { connect } from "@/libs/connect";
+import Jobs from "@/models/jobs";
 import { NextRequest, NextResponse } from "next/server";
-import { RowDataPacket } from "mysql2"; // Import this if you're using mysql2
-
-// Define an interface for your job structure
-interface Job extends RowDataPacket {
-  id: number;
-  // Add other fields that your job has
-  title?: string;
-  description?: string;
-  // ... other fields
-}
+import { server } from "@/libs/connect";
 
 export const GET = async (
   req: NextRequest,
@@ -17,19 +8,12 @@ export const GET = async (
 ) => {
   const { id } = params;
   try {
-    const db = await connect();
+    await server();
 
-    const q = `
-     SELECT * FROM jobs WHERE id = ?
-    `;
+    console.log(id);
+    
 
-    const [rows] = await db.query<Job[]>(q, [id]);
-    const getOne = rows[0];
-    await db.end();
-
-    if (!getOne) {
-      return NextResponse.json({ message: "Job not found" }, { status: 404 });
-    }
+    const getOne = await Jobs.findById(id);
 
     return NextResponse.json(getOne, { status: 200 });
   } catch (error) {

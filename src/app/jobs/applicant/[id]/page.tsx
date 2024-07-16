@@ -19,12 +19,13 @@ const Applied = ({ params }: { params: { id: string } }) => {
     dispatch(getApplliedJobs(id));
   }, [id]);
 
-  console.log(appliedJobs.results);
+  console.log(appliedJobs
+  );
 
   return (
     <main className="w-11/12 mx-auto mb-10">
       <section className="mt-10">
-        {appliedJobs?.results?.map((j) => (
+        {appliedJobs?.applicants?.map((j) => (
           <ApplicantDetail key={j.id} j={j} />
         ))}
         {/* pagination */}
@@ -39,7 +40,7 @@ export default Applied;
 interface RootState {
   jobs: {
     appliedJobs: {
-      results: any[]; // Adjust this type if you know the structure of the results
+      applicants: any[]; // Adjust this type if you know the structure of the results
     };
     // Add other state properties here as needed
   };

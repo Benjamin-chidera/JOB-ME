@@ -1,8 +1,17 @@
-import { connect } from "@/libs/connect";
+import { server } from "@/libs/connect";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
+import User from "@/models/user";
+
+type AuthUser = {
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: string;
+};
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -18,29 +27,26 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<AuthUser | null> {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
         try {
-          const connection = await connect();
-          const q = "SELECT * FROM users WHERE email = ?";
-          const [users] = await connection.execute(q, [credentials.email]);
+          await server();
 
-          if (!Array.isArray(users) || users.length === 0) {
-            return null;
+          const user = await User.findOne({ email: credentials.email });
+
+          if (!user) {
+            throw new Error("Invalid credentials");
           }
 
-          const user = users[0] as any;
           const checkPassword = await bcrypt.compare(
             credentials.password,
             user.password
           );
 
-          console.log({ user });
-
           if (!checkPassword) {
-            return null;
+            throw new Error("Invalid credentials");
           }
 
           return {
@@ -85,3 +91,5 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+export default NextAuth(authOptions);

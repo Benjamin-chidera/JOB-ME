@@ -8,7 +8,7 @@ import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 interface Job {
-  id: string;
+  _id: string;
   companyImage: string;
   positions: string;
   companyName: string;
@@ -35,7 +35,7 @@ const Jobs = () => {
       );
       const jobsWithStringId = data.map((job) => ({
         ...job,
-        id: job.id.toString(), // Convert id to string
+        id: job._id.toString(), // Convert id to string
       }));
       setJobs(jobsWithStringId);
     } catch (error) {
@@ -52,6 +52,9 @@ const Jobs = () => {
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  console.log(jobs);
+  
 
   return (
     <main className="mb-10">
@@ -76,9 +79,9 @@ const Jobs = () => {
       <section className="mt-10">
         {jobs.map((j) => (
           <JobLists
-            key={j.id}
+            key={j._id}
             j={
-              j as {
+              j as unknown as {
                 id: string;
                 companyImage: string;
                 positions: string;

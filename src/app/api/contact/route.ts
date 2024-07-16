@@ -1,18 +1,20 @@
-import { connect } from "@/libs/connect";
+import { server } from "@/libs/connect";
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/libs/sendEmail";
+import Contact from "@/models/contact";
 
 export const POST = async (req: NextRequest) => {
   try {
     const { name, email, phonenumber, subject, message } = await req.json();
-    const db = await connect();
+    await server();
 
-    const q =
-      "INSERT INTO contact (name, email, phonenumber, subject, message) VALUES(?,?,?,?,?)";
-
-    const values = [name, email, phonenumber, subject, message];
-
-    const [result] = await db.query(q, values);
+    const result = await Contact.create({
+      name,
+      email,
+      phonenumber,
+      subject,
+      message,
+    });
 
     const replyMessage = `Thank you for contacting JOBME ${name} with the email ${email} and phone number ${phonenumber}. We will get be to you immediately.`;
     const subjects = subject;

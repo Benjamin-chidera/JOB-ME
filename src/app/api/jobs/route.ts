@@ -1,6 +1,8 @@
-import { connect } from "@/libs/connect";
+import Jobs from "@/models/jobs";
 import { NextRequest, NextResponse } from "next/server";
+import { server } from "@/libs/connect";
 
+// POST request to create a new job
 export const POST = async (req: NextRequest) => {
   try {
     const {
@@ -17,14 +19,9 @@ export const POST = async (req: NextRequest) => {
       user_id,
     } = await req.json();
 
-    console.log("Company image:", companyImage); // Log the companyImage
+    await server();
 
-    const db = await connect();
-
-    const q =
-      "INSERT INTO jobs (positions, companyName, companyImage, jobType, country, salary, experience, description, responsibilities, skills, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    const values = [
+    const job = await Jobs.create({
       positions,
       companyName,
       companyImage,
@@ -33,18 +30,15 @@ export const POST = async (req: NextRequest) => {
       salary,
       experience,
       description,
-      JSON.stringify(responsibilities),
-      JSON.stringify(skills),
+      responsibilities: Array.isArray(responsibilities)
+        ? responsibilities
+        : [responsibilities],
+      skills: Array.isArray(skills) ? skills : [skills],
       user_id,
-    ];
-
-    const [result] = await db.query(q, values);
-    await db.end();
-
-    console.log(result);
+    });
 
     return NextResponse.json(
-      { msg: "Job posting successful", result },
+      { msg: "Job posting successful", job },
       { status: 201 }
     );
   } catch (error) {
@@ -60,52 +54,47 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
+// GET request to retrieve jobs with optional search query parameters
 export const GET = async (req: NextRequest) => {
   try {
-    // for search query
+    await server();
+
     const url = new URL(req.url);
     const searchParams = new URLSearchParams(url.searchParams);
 
     const jobType = searchParams.get("jobType");
     const companyName = searchParams.get("companyName");
-    const position = searchParams.get("position");
+    const positions = searchParams.get("positions");
     const country = searchParams.get("country");
-    // for search query
 
-    const db = await connect();
-
-    let q = `
-      SELECT jobs.*
-      FROM jobs
-      WHERE 1=1
-    `;
+    // Constructing the query object
+    const query: any = {};
 
     if (jobType) {
-      q += ` AND jobType LIKE '%${jobType}%'`;
+      query.jobType = { $regex: jobType, $options: "i" };
     }
     if (companyName) {
-      q += ` AND companyName LIKE '%${companyName}%'`;
+      query.companyName = { $regex: companyName, $options: "i" };
     }
-    if (position) {
-      q += ` AND positions LIKE '%${position}%'`;
+    if (positions) {
+      query.positions = { $regex: positions, $options: "i" };
     }
     if (country) {
-      q += ` AND country LIKE '%${country}%'`;
+      query.country = { $regex: country, $options: "i" };
     }
 
-    const [rows] = await db.query(q);
-    await db.end();
+    const jobs = await Jobs.find(query).sort("-createdAt");
 
-    return NextResponse.json(rows, { status: 200 });
+    return NextResponse.json(jobs, { status: 200 });
   } catch (error) {
-     console.log("Error:", error);
-     if (error instanceof Error) {
-       return NextResponse.json({ err: error.message }, { status: 500 });
-     } else {
-       return NextResponse.json(
-         { err: "An unknown error occurred" },
-         { status: 500 }
-       );
-     }
+    console.log("Error:", error);
+    if (error instanceof Error) {
+      return NextResponse.json({ err: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json(
+        { err: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 };

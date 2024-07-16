@@ -11,7 +11,7 @@ export const EmployerJobList = ({ j }: any) => {
   return (
     <main className="  border lg:border-0 m-2  rounded-lg">
       <Link
-        href={`/jobs/employer/${j.id}`}
+        href={`/jobs/${j._id}`}
         className="lg:w-10/12 mx-auto lg:border mb-4 md:h-[100px] p-5 md:flex justify-between items-center rounded-lg lg:shadow-lg"
       >
         <div className="flex items-center gap-5 flex-1 mb-2 lg:mb-0">

@@ -58,25 +58,12 @@ const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
   console.log({ sliceRelatedJobs });
 
   console.log(applicantJobDetails);
-  
 
   return (
     <main className=" mt-10">
       <section className="lg:flex justify-center gap-14 mb-10 w-11/12 mx-auto">
         <section>
           <div className=" bg-[#DBF7FD] p-7 rounded-xl w-[500px] max-w-full">
-            <Image
-              src={applicantJobDetails?.companyImage}
-              alt="company-logo"
-              width={40}
-              height={40}
-              className="w-10 h-10 shadow-lg"
-            />
-            <h2 className=" font-semibold text-2xl mt-3">
-              {applicantJobDetails?.positions}
-            </h2>
-            <p className=" max-w-md my-3">{applicantJobDetails?.description}</p>
-
             <p className=" mt-10 font-semibold text-xl">Job Information:</p>
 
             <section className=" bg-white shadow-xl p-5 w-fit mt-3 rounded-xl border-2 flex flex-col gap-2">
@@ -84,10 +71,17 @@ const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
                 <span>
                   <CiUser size={20} />
                 </span>{" "}
-                Employment Type:{" "}
+                Applicant Details:
+              </p>
+
+              <p className=" font-semibold flex items-center gap-2">
+                <span>
+                  <IoLocationOutline size={20} />
+                </span>{" "}
+                First Name:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {applicantJobDetails?.jobType}
+                  {applicantJobDetails?.firstname}
                 </span>
               </p>
 
@@ -95,21 +89,10 @@ const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
                 <span>
                   <IoLocationOutline size={20} />
                 </span>{" "}
-                Location:{" "}
+                Last Name:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {applicantJobDetails?.country}
-                </span>
-              </p>
-
-              <p className=" font-semibold flex items-center gap-2">
-                <span>
-                  <CiClock2 size={20} />
-                </span>{" "}
-                Date Posted:{" "}
-                <span className="text-blue-300 font-medium">
-                  {" "}
-                  {format(applicantJobDetails?.created_at)}
+                  {applicantJobDetails?.lastname}
                 </span>
               </p>
 
@@ -117,11 +100,10 @@ const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
                 <span>
                   <GoBriefcase size={20} />
                 </span>{" "}
-                Experience:{" "}
+                Email Address:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {applicantJobDetails?.experience}{" "}
-                  {applicantJobDetails?.experience > 2 ? "Year" : "Years"}
+                  {applicantJobDetails?.email}{" "}
                 </span>
               </p>
 
@@ -129,45 +111,24 @@ const ApplicantsDetails = ({ params }: { params: { id: string } }) => {
                 <span>
                   <BsCurrencyDollar size={20} />
                 </span>{" "}
-                Salary:{" "}
+                Phone Number:{" "}
                 <span className="text-blue-300 font-medium">
                   {" "}
-                  {applicantJobDetails?.salary}
+                  {applicantJobDetails?.phonenumber}
                 </span>
               </p>
             </section>
           </div>
-
-          <div className=" mt-4">
-            <Image
-              src={map}
-              alt="map"
-              className=" w-[500px] max-w-full h-[400px] object-cover rounded-xl"
-            />
-          </div>
         </section>
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
           <h2 className=" font-semibold text-2xl">Job Description:</h2>
+          <p>Cover letter</p>
+          <p> {applicantJobDetails?.coverletter}</p>
 
           {/* <PDFViewer>
             <MyPdf applicantJobDetails={applicantJobDetails} />
           </PDFViewer> */}
         </section>
-      </section>
-
-      <section className=" mt-24 mb-10">
-        <div className=" text-center">
-          <h2 className=" font-semibold text-xl">Related Jobs</h2>
-          <p className=" font-medium">
-            Lorem ipsum dolor sit amet consectetur. Risus tempus eget egestas
-            dolor ut. At interdum amet id duis pulvinar quis massa elit. Amet
-            quam commodo est pulvinar vitae.
-          </p>
-        </div>
-
-        <div className=" mt-10">
-          <RelatedJobs sliceRelatedJobs={sliceRelatedJobs} />
-        </div>
       </section>
     </main>
   );

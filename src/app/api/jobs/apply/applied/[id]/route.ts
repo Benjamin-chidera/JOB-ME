@@ -1,17 +1,21 @@
 import Jobs from "@/models/jobs";
 import { NextRequest, NextResponse } from "next/server";
 import { server } from "@/libs/connect";
+import Application from "@/models/applications";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const { id } = params;
   try {
     await server();
 
-     const employerJobs = await Jobs.find().populate(
-       "user_id",
-       "firstname"
-     );
+    console.log(id);
 
-    return NextResponse.json(employerJobs, { status: 200 });
+    const getOne = await Application.findById(id);
+
+    return NextResponse.json(getOne, { status: 200 });
   } catch (error) {
     console.log("Error:", error);
     if (error instanceof Error) {

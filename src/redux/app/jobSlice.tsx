@@ -119,7 +119,7 @@ export const getApplliedJobs = createAsyncThunk<any, string>(
   async (userId: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/jobs/apply/applied?jobId=${userId}`
+        `http://localhost:3000/api/jobs/apply?jobId=${userId}`
       );
       return data;
     } catch (error) {
@@ -134,7 +134,7 @@ export const getApplicantJobDetails = createAsyncThunk<any, string>(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/jobs/apply/applied/details?jobId=${id}`
+        `http://localhost:3000/api/jobs/apply/applied/${id}`
       );
       return data;
     } catch (error) {

@@ -9,9 +9,11 @@ import x from "../../../public/x.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const Footer = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   if (pathname === "/login") {
     return null;
@@ -20,7 +22,7 @@ export const Footer = () => {
   if (pathname === "/signup") {
     return null;
   }
-  
+
   if (pathname === "/signup/jobSeeker") {
     return null;
   }
@@ -93,13 +95,13 @@ export const Footer = () => {
               <Link href={"/jobs"}>Find Jobs</Link>
             </li>
             <li className=" list-disc">
-              <Link href={"/jobs"}>Post a Jobs</Link>
+              <Link href={`${session?.user.role === "employer" ? "/post-jobs" : "/jobs"}`}>Post a Jobs</Link>
             </li>
             <li className=" list-disc">
-              <Link href={"/jobs"}>Contact Us</Link>
+              <Link href={"/contact"}>Contact Us</Link>
             </li>
             <li className=" list-disc">
-              <Link href={"/jobs"}>Login</Link>
+              <Link href={"/login"}>Login</Link>
             </li>
           </ul>
         </div>

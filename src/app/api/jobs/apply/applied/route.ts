@@ -1,5 +1,4 @@
-// /job/apply/applied
-import { connect } from "@/libs/connect";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -15,7 +14,7 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    const db = await connect();
+    // const db = await connect();
 
     if (userId) {
       // Get all jobs applied by a specific user along with applicant details
@@ -26,8 +25,8 @@ export const GET = async (req: NextRequest) => {
         WHERE a.user_id = ?
         ORDER BY a.applied_at DESC
       `;
-      const [results] = await db.query(query, [userId]);
-      return NextResponse.json({ appliedJobs: results }, { status: 200 });
+      // const [results] = await db.query(query, [userId]);
+      // return NextResponse.json({ appliedJobs: results }, { status: 200 });
     } else if (jobId) {
       // Get all applicants for a specific job along with job details
       const query = `
@@ -38,8 +37,8 @@ export const GET = async (req: NextRequest) => {
         WHERE a.job_id = ?
         ORDER BY a.applied_at DESC
       `;
-      const [results] = await db.query(query, [jobId]);
-      return NextResponse.json({results }, { status: 200 });
+      // const [results] = await db.query(query, [jobId]);
+      // return NextResponse.json({results }, { status: 200 });
     }
   } catch (error) {
     console.log(error);
