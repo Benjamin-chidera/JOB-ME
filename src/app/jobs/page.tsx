@@ -28,7 +28,7 @@ const Jobs = () => {
   const fetchJobs = async (filters = {}) => {
     try {
       const { data } = await axios.get<Job[]>(
-        "http://localhost:3000/api/jobs",
+        "/api/jobs",
         {
           params: filters,
         }
