@@ -24,7 +24,7 @@ export const registerUser = createAsyncThunk<any, RegisterFormData>(
   async (formData: RegisterFormData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/signup",
+        "/api/signup",
         formData
       );
       return data;
@@ -39,7 +39,7 @@ export const contactUs = createAsyncThunk<any, ContactFormData>(
   async (form, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/contact",
+        "/api/contact",
         form
       );
 
