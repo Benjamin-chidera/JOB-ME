@@ -28,7 +28,6 @@ const JobApplication = ({ params }: { params: { id: string } }) => {
   } = useForm<applyJobType>();
 
   const { id } = params;
-  console.log("job id", id);
 
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
@@ -204,7 +203,9 @@ const JobApplication = ({ params }: { params: { id: string } }) => {
                   </div>
                   <CldUploadWidget
                     uploadPreset="JOBME-jobs"
-                    options={{ sources: ["local"] }}
+                    options={{
+                      sources: ["local"],
+                    }}
                     onUpload={(result: CloudinaryUploadWidgetResults) => {
                       if (result.info && typeof result.info !== "string") {
                         setCompanyImageUrl(result.info.secure_url);

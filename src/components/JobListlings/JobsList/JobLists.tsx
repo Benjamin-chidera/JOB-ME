@@ -20,7 +20,7 @@ type jobsType = {
     companyImage: string;
     positions: string;
     companyName: string;
-    created_at: string;
+    createdAt: string;
     country: string;
     salary: string;
     jobType: string;
@@ -33,7 +33,6 @@ export const JobLists = ({ j }: jobsType) => {
   const [hasApplied, setHasApplied] = useState(false);
 
   // console.log({ userId: session?.user?.id, jobId: j.id });
-  
 
   useEffect(() => {
     const checkApplicationStatus = async () => {
@@ -62,24 +61,6 @@ export const JobLists = ({ j }: jobsType) => {
 
     checkApplicationStatus();
   }, [session?.user?.id, j.id]);
-
-  // const handleApplyForJob = async () => {
-  //   if (session?.user?.id && !hasApplied) {
-  //     const form = {
-  //       userId: session.user.id,
-  //       jobId: j.id,
-  //     };
-  //     try {
-  //       await dispatch(applyJobs(form));
-  //       setHasApplied(true);
-  //       // Update local storage
-  //       const localStorageKey = `application_${session.user.id}_${j.id}`;
-  //       localStorage.setItem(localStorageKey, JSON.stringify(true));
-  //     } catch (error) {
-  //       console.error("Failed to apply for job:", error);
-  //     }
-  //   }
-  // };
 
   const router = useRouter();
 
@@ -111,7 +92,7 @@ export const JobLists = ({ j }: jobsType) => {
             <span>
               <CiClock2 size={24} />
             </span>{" "}
-            Posted {format(j.created_at)}
+            Posted {format(j.createdAt)}
           </p>
         </div>
 

@@ -6,10 +6,11 @@ import { getEmployerJobs } from "@/redux/app/jobSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+import { JobSkeleton } from "@/components/skeleton/JobSkeleton";
 
 const Employer = () => {
   const dispatch = useAppDispatch();
-  const { employerJobs } = useAppSelector((state) => state.jobs);
+  const { employerJobs, status } = useAppSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getEmployerJobs());
@@ -17,9 +18,11 @@ const Employer = () => {
 
   return (
     <main className=" w-full mx-auto mb-10">
-      {employerJobs.map((j) => (
-        <EmployerJobList key={j.id} j={j} />
-      ))}
+      {status === "loading" ? (
+        <JobSkeleton num={employerJobs.length || 5} />
+      ) : (
+        employerJobs.map((j) => <EmployerJobList key={j.id} j={j} />)
+      )}
     </main>
   );
 };

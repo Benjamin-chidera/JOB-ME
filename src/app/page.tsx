@@ -15,6 +15,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+import { LatestJobSkeleton } from "@/components/skeleton/LatestJobSkeleton";
 
 export default function Home() {
   // const { allJobs } = useAppSelector((state) => state.jobs);

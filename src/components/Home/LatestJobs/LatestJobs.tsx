@@ -15,12 +15,13 @@ import { useSession } from "next-auth/react";
 import { FormatCurrency } from "@/libs/FormatCurrency";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+import { LatestJobSkeleton } from "@/components/skeleton/LatestJobSkeleton";
 
 export const LatestJobs = () => {
-  const { allJobs } = useAppSelector((state) => state.jobs);
+  const { allJobs, status } = useAppSelector((state) => state.jobs);
 
   const getThree = allJobs?.slice(0, 6);
-  console.log(getThree);
+  console.log(status);
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -35,62 +36,69 @@ export const LatestJobs = () => {
         vitae nisl imperdiet auctor mattis viverra egestas mattis.
       </p>
 
-      <section className=" mt-10 grid md:grid-cols-3 place-items-center w-8/12 items-center flex-wrap mx-auto gap-10">
-        {getThree?.map((job) => (
-          <div key={job.id} className="w-[360px] border rounded-xl text-start">
-            <div className="p-5">
-              <Link href={`/jobs/${job._id}`}>
-                <h2 className=" font-semibold text-xl">{job.positions}</h2>
+      <section className=" mt-10 flex justify-center place-items-center gap-10 items-center flex-wrap mx-auto">
+        {status === "loading" ? (
+          <LatestJobSkeleton num={getThree.length || 3} />
+        ) : (
+          getThree?.map((job) => (
+            <div
+              key={job.id}
+              className="w-[360px] border rounded-xl text-start"
+            >
+              <div className="p-5">
+                <Link href={`/jobs/${job._id}`}>
+                  <h2 className=" font-semibold text-xl">{job.positions}</h2>
 
-                <p className=" text-gray-400 mt-2 flex items-center gap-1">
-                  <span>
-                    <CiClock2 size={24} />
-                  </span>{" "}
-                  Posted {format(job.created_at)}
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#0DCAF0] capitalize text-sm mode w-fit px-3 p-2">
-                    {job.jobType}
-                  </p>
-                  <p className=" font-semibold">
-                    {FormatCurrency(job.salary, "USD")}
-                  </p>
-                </div>
-              </Link>
-            </div>
-            <hr />
-
-            <div className="p-5 ">
-              <div className="flex items-center gap-3 mb-3">
-                <Image
-                  src={job.companyImage}
-                  alt="company-logo"
-                  width={40}
-                  height={40}
-                  className=" shadow-xl p-1 rounded-xl"
-                />
-                <div>
-                  <p className=" font-semibold">{job.companyName}</p>
-                  <p className=" flex items-center gap-1 text-gray-400">
+                  <p className=" text-gray-400 mt-2 flex items-center gap-1">
                     <span>
-                      <IoLocationOutline size={24} />
+                      <CiClock2 size={24} />
                     </span>{" "}
-                    {job.country}
+                    Posted {format(job.created_at)}
                   </p>
-                </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#0DCAF0] capitalize text-sm mode w-fit px-3 p-2">
+                      {job.jobType}
+                    </p>
+                    <p className=" font-semibold">
+                      {FormatCurrency(job.salary, "USD")}
+                    </p>
+                  </div>
+                </Link>
               </div>
+              <hr />
 
-              {session?.user?.role !== "employer" && (
-                <button
-                  className="font-medium bg-[#0DCAF0] py-1 px-3 text-[14px] text-white rounded-lg"
-                  onClick={() => router.push(`/jobs/${job.id}/application`)}
-                >
-                  Apply Now
-                </button>
-              )}
+              <div className="p-5 ">
+                <div className="flex items-center gap-3 mb-3">
+                  <Image
+                    src={job.companyImage}
+                    alt="company-logo"
+                    width={40}
+                    height={40}
+                    className=" shadow-xl p-1 rounded-xl"
+                  />
+                  <div>
+                    <p className=" font-semibold">{job.companyName}</p>
+                    <p className=" flex items-center gap-1 text-gray-400">
+                      <span>
+                        <IoLocationOutline size={24} />
+                      </span>{" "}
+                      {job.country}
+                    </p>
+                  </div>
+                </div>
+
+                {session?.user?.role !== "employer" && (
+                  <button
+                    className="font-medium bg-[#0DCAF0] py-1 px-3 text-[14px] text-white rounded-lg"
+                    onClick={() => router.push(`/jobs/${job.id}/application`)}
+                  >
+                    Apply Now
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </section>
     </main>
   );

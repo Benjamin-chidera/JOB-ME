@@ -36,7 +36,7 @@ interface EmployerJobDetail {
   description: string;
   jobType: string;
   country: string;
-  created_at: string;
+  createdAt: string;
   experience: number;
   salary: number;
   id: string;
@@ -147,7 +147,7 @@ export const getApplicantJobDetails = createAsyncThunk<any, string>(
 
 interface JobState {
   postJob: PostJobData | null;
-  status: string;
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: any;
   employerJobs: EmployerJobDetail[];
   employerJobsDetail: EmployerJobDetail | null;

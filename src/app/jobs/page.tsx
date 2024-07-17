@@ -6,6 +6,7 @@ import { JobSelector } from "../../components/Home/jobSelector/JobSelector";
 import { JobLists } from "../../components/JobListlings/JobsList/JobLists";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
+import { JobSkeleton } from "@/components/skeleton/JobSkeleton";
 
 interface Job {
   _id: string;
@@ -24,15 +25,14 @@ const Jobs = () => {
   const [position, setPosition] = useState("");
   const [country, setCountry] = useState("");
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchJobs = async (filters = {}) => {
+    setLoading(true);
     try {
-      const { data } = await axios.get<Job[]>(
-        "/api/jobs",
-        {
-          params: filters,
-        }
-      );
+      const { data } = await axios.get<Job[]>("/api/jobs", {
+        params: filters,
+      });
       const jobsWithStringId = data.map((job) => ({
         ...job,
         id: job._id.toString(), // Convert id to string
@@ -40,6 +40,8 @@ const Jobs = () => {
       setJobs(jobsWithStringId);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,9 +54,6 @@ const Jobs = () => {
   useEffect(() => {
     fetchJobs();
   }, []);
-
-  console.log(jobs);
-  
 
   return (
     <main className="mb-10">
@@ -77,23 +76,27 @@ const Jobs = () => {
       </section>
 
       <section className="mt-10">
-        {jobs.map((j) => (
-          <JobLists
-            key={j._id}
-            j={
-              j as unknown as {
-                id: string;
-                companyImage: string;
-                positions: string;
-                companyName: string;
-                created_at: string;
-                country: string;
-                salary: string;
-                jobType: string;
+        {loading ? (
+          <JobSkeleton num={jobs.length || 5} />
+        ) : (
+          jobs.map((j) => (
+            <JobLists
+              key={j._id}
+              j={
+                j as unknown as {
+                  id: string;
+                  companyImage: string;
+                  positions: string;
+                  companyName: string;
+                  createdAt: string;
+                  country: string;
+                  salary: string;
+                  jobType: string;
+                }
               }
-            }
-          />
-        ))}
+            />
+          ))
+        )}
         {/* pagination */}
       </section>
     </main>
