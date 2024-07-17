@@ -36,7 +36,7 @@ export const EmployerJobList = ({ j }: any) => {
             <span>
               <CiClock2 size={24} />
             </span>{" "}
-            Posted {format(j.created_at)}
+            Posted {format(j.createdAt)}
           </p>
         </div>
 

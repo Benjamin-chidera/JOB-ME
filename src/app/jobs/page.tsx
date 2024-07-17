@@ -13,7 +13,7 @@ interface Job {
   companyImage: string;
   positions: string;
   companyName: string;
-  created_at: string;
+  createdAt: string;
   country: string;
   salary: string;
   jobType: string;

@@ -23,7 +23,7 @@ interface EmployerJobDetail {
   description: string;
   jobType: string;
   country: string;
-  created_at: string;
+  createdAt: string;
   experience: number;
   salary: number;
   id: string;
@@ -56,8 +56,8 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const sliceRelatedJobs = isRelated?.slice(0, 3);
   // console.log({ sliceRelatedJobs });
 
-  const createdDate = employerJobsDetail?.created_at
-    ? new Date(employerJobsDetail.created_at)
+  const createdDate = employerJobsDetail?.createdAt
+    ? new Date(employerJobsDetail.createdAt)
     : new Date();
   const experience = employerJobsDetail?.experience ?? 0;
   const salary = employerJobsDetail?.salary ?? 0;

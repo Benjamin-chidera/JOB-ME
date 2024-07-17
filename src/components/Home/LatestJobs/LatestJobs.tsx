@@ -53,7 +53,7 @@ export const LatestJobs = () => {
                     <span>
                       <CiClock2 size={24} />
                     </span>{" "}
-                    Posted {format(job.created_at)}
+                    Posted {format(job.createdAt)}
                   </p>
                   <div className="flex items-center justify-between">
                     <p className="text-[#0DCAF0] capitalize text-sm mode w-fit px-3 p-2">
