@@ -27,6 +27,7 @@ interface ApplyJobData {
 }
 
 interface EmployerJobDetail {
+  _id: any;
   companyName: any;
   responsibilities: string[];
   skills: string[];

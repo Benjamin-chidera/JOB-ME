@@ -28,7 +28,7 @@ export default function Home() {
 
   const fetchJobs = async (filters = {}) => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/jobs", {
+      const { data } = await axios.get("/api/jobs", {
         params: filters,
       });
       setJobs(data);

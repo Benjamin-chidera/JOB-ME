@@ -35,11 +35,11 @@ export const LatestJobs = () => {
         vitae nisl imperdiet auctor mattis viverra egestas mattis.
       </p>
 
-      <section className=" mt-10 grid md:grid-cols-3 place-items-center w-10/12 items-center flex-wrap mx-auto gap-10">
+      <section className=" mt-10 grid md:grid-cols-3 place-items-center w-8/12 items-center flex-wrap mx-auto gap-10">
         {getThree?.map((job) => (
-          <div key={job.id} className="w-[300px] border rounded-xl text-start">
+          <div key={job.id} className="w-[360px] border rounded-xl text-start">
             <div className="p-5">
-              <Link href={`/jobs/${job.id}`}>
+              <Link href={`/jobs/${job._id}`}>
                 <h2 className=" font-semibold text-xl">{job.positions}</h2>
 
                 <p className=" text-gray-400 mt-2 flex items-center gap-1">
