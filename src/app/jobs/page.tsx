@@ -7,6 +7,7 @@ import { JobLists } from "../../components/JobListlings/JobsList/JobLists";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 import { JobSkeleton } from "@/components/skeleton/JobSkeleton";
+import { Pagination } from "@/components/pagination/Pagination";
 
 interface Job {
   _id: string;
@@ -19,6 +20,13 @@ interface Job {
   jobType: string;
 }
 
+interface JobsResponse {
+  jobs: Job[];
+  totalJobs: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 const Jobs = () => {
   const [jobType, setJobType] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -26,18 +34,18 @@ const Jobs = () => {
   const [country, setCountry] = useState("");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchJobs = async (filters = {}) => {
+  const fetchJobs = async (filters = {}, page = 1) => {
     setLoading(true);
     try {
-      const { data } = await axios.get<Job[]>("/api/jobs", {
-        params: filters,
+      const { data } = await axios.get<JobsResponse>("/api/jobs", {
+        params: { ...filters, page, limit: 10 },
       });
-      const jobsWithStringId = data.map((job) => ({
-        ...job,
-        id: job._id.toString(), // Convert id to string
-      }));
-      setJobs(jobsWithStringId);
+      setJobs(data.jobs);
+      setTotalPages(data.totalPages);
+      setCurrentPage(data.currentPage);
     } catch (error) {
       console.error(error);
     } finally {
@@ -48,12 +56,16 @@ const Jobs = () => {
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const filters = { jobType, companyName, position, country };
-    fetchJobs(filters);
+    fetchJobs(filters, 1);
   };
 
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  const handlePageChange = (newPage: number) => {
+    fetchJobs({ jobType, companyName, position, country }, newPage);
+  };
 
   return (
     <main className="mb-10">
@@ -103,7 +115,14 @@ const Jobs = () => {
             />
           ))
         )}
-        {/* pagination */}
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </section>
     </main>
   );

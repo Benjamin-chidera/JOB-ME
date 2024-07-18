@@ -151,7 +151,9 @@ interface JobState {
   error: any;
   employerJobs: EmployerJobDetail[];
   employerJobsDetail: EmployerJobDetail | null;
-  allJobs: EmployerJobDetail[];
+  allJobs: {
+    jobs: EmployerJobDetail[];
+  } | null;
   apply: ApplyJobData | null;
   appliedJobs: ApplyJobData[];
   applicantJobDetails: ApplyJobData | null;
@@ -163,7 +165,7 @@ const initialState: JobState = {
   error: null,
   employerJobs: [],
   employerJobsDetail: null,
-  allJobs: [],
+  allJobs: null,
   apply: null,
   appliedJobs: [],
   applicantJobDetails: null,
@@ -229,7 +231,7 @@ const jobSlice = createSlice({
       .addCase(getAllJobs.pending, (state) => {
         state.status = "loading";
         state.error = null;
-        state.allJobs = [];
+        state.allJobs = null;
       })
       .addCase(getAllJobs.fulfilled, (state, { payload }) => {
         state.status = "idle";
@@ -239,7 +241,7 @@ const jobSlice = createSlice({
       .addCase(getAllJobs.rejected, (state, { payload }) => {
         state.status = "failed";
         state.error = payload;
-        state.allJobs = [];
+        state.allJobs = null;
       })
 
       // apply for a JOBS

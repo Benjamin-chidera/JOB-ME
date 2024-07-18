@@ -54,7 +54,7 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
-// GET request to retrieve jobs with optional search query parameters
+
 export const GET = async (req: NextRequest) => {
   try {
     await server();
@@ -66,6 +66,8 @@ export const GET = async (req: NextRequest) => {
     const companyName = searchParams.get("companyName");
     const positions = searchParams.get("positions");
     const country = searchParams.get("country");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "3");
 
     // Constructing the query object
     const query: any = {};
@@ -83,9 +85,23 @@ export const GET = async (req: NextRequest) => {
       query.country = { $regex: country, $options: "i" };
     }
 
-    const jobs = await Jobs.find(query).sort("-createdAt");
+    const jobs = await Jobs.find(query)
+      .sort("-createdAt")
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    return NextResponse.json(jobs, { status: 200 });
+    const totalJobs = await Jobs.countDocuments(query);
+    const totalPages = Math.ceil(totalJobs / limit);
+
+    return NextResponse.json(
+      {
+        jobs,
+        totalJobs,
+        totalPages,
+        currentPage: page,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Error:", error);
     if (error instanceof Error) {

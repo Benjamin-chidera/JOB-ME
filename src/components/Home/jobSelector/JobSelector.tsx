@@ -40,16 +40,19 @@ export const JobSelector = ({
   const { allJobs } = useAppSelector((state) => state.jobs);
 
   const uniqueCompanies = Array.from(
-    new Set(allJobs?.map((job) => job.companyName))
+    new Set(allJobs?.jobs?.map((job) => job.companyName) || [])
   );
 
   const uniqueCountries = Array.from(
-    new Set(allJobs?.map((job) => job.country))
+    new Set(allJobs?.jobs?.map((job) => job.country))
   );
 
   const uniquePositions = Array.from(
-    new Set(allJobs?.map((job) => job.positions))
+    new Set(allJobs?.jobs?.map((job) => job.positions))
   );
+
+  // console.log(allJobs);
+  
 
   return (
     <main>
