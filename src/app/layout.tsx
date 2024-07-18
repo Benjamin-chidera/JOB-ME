@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "JOBME",
   description:
-    "This platform allows job seekers to browse a comprehensive list of job opportunities, apply for positions that match their skills and interests, and manage their applications seamlessly. Employers benefit from JOBME by easily posting available job openings, reaching a broad audience of qualified candidates, and managing applications efficiently.",
+    "JOBME lets job seekers browse and apply for jobs while managing applications. Employers can post openings, reach qualified candidates, and manage applications easily.",
 };
 
 export default async function RootLayout({
