@@ -7,9 +7,9 @@ export const LatestJobSkeleton = ({ num }: { num: number }) => {
   }
 
   return (
-    <main className=" flex justify-center gap-10 items-center flex-wrap mx-auto">
+    <main className=" flex justify-center gap-3">
       {l.map((i, index) => {
-        return <div className="skeleton h-[250px] w-[360px]" key={index}></div>;
+        return <div className="skeleton h-[250px] w-[300px]" key={index}></div>;
       })}
     </main>
   );

@@ -49,7 +49,11 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="">
+                <a
+                  href="https://linkedin.com/in/benjamin-benjamin
+
+"
+                >
                   <Image
                     src={lk}
                     width={50}
@@ -60,7 +64,7 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href=" https://instagram.com/benjamin_c.dev?igshid=MzMyNGUyNmU2YQ==">
                   <Image
                     src={insta}
                     width={50}
@@ -71,7 +75,7 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://twitter.com/BenjaminChide14">
                   <Image
                     src={x}
                     width={50}
