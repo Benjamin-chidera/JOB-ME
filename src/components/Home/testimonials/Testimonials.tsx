@@ -7,7 +7,7 @@ const testimonails = [
     name: "John Doe",
     image: "https://randomuser.me/api/portraits/men/1.jpg",
     review:
-      "“Lorem ipsum dolor sit amet consectetur. Etiam elit nisl aliquam tempor purus ac. Vestibulum eu euismod enim elit. Nunc phasellus aliquet eu gravida massa vel.”",
+      "“The service exceeded my expectations. The team was highly professional and attentive, ensuring that all my needs were met with precision. I’m extremely satisfied with the results and would recommend them to anyone seeking top-notch quality.”",
     country: "South Africa",
   },
   {
@@ -15,7 +15,7 @@ const testimonails = [
     name: "Jane Doe",
     image: "https://randomuser.me/api/portraits/women/1.jpg",
     review:
-      "“Lorem ipsum dolor sit amet consectetur. Etiam elit nisl aliquam tempor purus ac. Vestibulum eu euismod enim elit. Nunc phasellus aliquet eu gravida massa vel.”",
+      "I had a fantastic experience working with this team. Their attention to detail and commitment to excellence truly set them apart. From start to finish, everything was handled efficiently and with great care. I highly recommend their services.",
     country: "United Kingdom",
   },
   {
@@ -23,7 +23,7 @@ const testimonails = [
     name: "James Doe",
     image: "https://randomuser.me/api/portraits/men/2.jpg",
     review:
-      "“Lorem ipsum dolor sit amet consectetur. Etiam elit nisl aliquam tempor purus ac. Vestibulum eu euismod enim elit. Nunc phasellus aliquet eu gravida massa vel.”",
+      "“I had a fantastic experience working with this team. Their attention to detail and commitment to excellence truly set them apart. From start to finish, everything was handled efficiently and with great care. I highly recommend their services.”",
     country: "Nigeria",
   },
 ];

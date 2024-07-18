@@ -100,12 +100,13 @@ export default function Home() {
               </h2>
 
               <p className="max-w-[470px] mb-6 mt-3 font-[500]">
-                Lorem ipsum dolor sit amet consectetur. Duis sed ornare
-                adipiscing sed platea integer habitant. Eros quis hac amet
-                dignissim morbi vulputate eriva it commodo mi. Est mauris diam
-                donec magna. Sit cras fringilla integer sed praesent urna amet.
-                Donec suspendisse quis sed placerat lacus eupiii pretium duis
-                semper est ac nec ultricie.
+                Explore a vast array of job openings designed to match your
+                skills and aspirations. Whether you're seeking new challenges,
+                career growth, or a change of pace, we have opportunities across
+                various industries that align perfectly with your goals. Find
+                positions that fit your expertise, experience, and passion, and
+                take the next step in your professional journey with confidence.
+                Your ideal job is just a search away!
               </p>
 
               <Link
@@ -124,12 +125,13 @@ export default function Home() {
               </h2>
 
               <p className="max-w-[470px] mb-6 mt-3 font-[500]">
-                Lorem ipsum dolor sit amet consectetur. Duis sed ornare
-                adipiscing sed platea integer habitant. Eros quis hac amet
-                dignissim morbi vulputate eriva it commodo mi. Est mauris diam
-                donec magna. Sit cras fringilla integer sed praesent urna amet.
-                Donec suspendisse quis sed placerat lacus eupiii pretium duis
-                semper est ac nec ultricie.
+                Discover exceptional individuals who can drive innovation and
+                excellence in your organization. Our platform connects you with
+                the most skilled and dynamic professionals across various
+                industries. From visionary leaders to creative problem-solvers,
+                find the talent that will elevate your team and help you achieve
+                your strategic goals. Tap into a global network of top-tier
+                candidates and find the perfect fit for your company’s needs.
               </p>
 
               <Link
@@ -178,9 +180,13 @@ export default function Home() {
               Get Jobs that match your Qualifications and Skill Set
             </h2>
             <p className=" md:max-w-[500px] my-7">
-              Lorem ipsum dolor sit amet consectetur. Dolor euismod mattis nulla
-              aliquam a. In ac in ornare donec consectetur. Nam semper gravida
-              enim dolor velit aliquam ut ac.{" "}
+              Discover job opportunities tailored to your unique qualifications
+              and skills. Our platform ensures that you find positions that
+              align perfectly with your expertise, experience, and career goals.
+              From specialized roles to general opportunities, explore positions
+              where your talents will be valued and rewarded. Start your search
+              today and connect with employers who are looking for exactly what
+              you have to offer.
             </p>
 
             <button

@@ -30,10 +30,13 @@ export const LatestJobs = () => {
     <main className=" text-center w-11/12 mx-auto mt-6 mb-10">
       <h3 className="font-semibold text-2xl">Latest Job Listings</h3>
       <p className=" max-w-[1000px] mx-auto mt-4">
-        Lorem ipsum dolor sit amet consectetur. Augue lacus senectus at amet
-        viverra ultrices eget. Tincidunt tristique viverra facilisis arcu non
-        nulla faucibus. Adipiscing blandit nunc lobortis pretium. Tempus viverra
-        vitae nisl imperdiet auctor mattis viverra egestas mattis.
+        Stay ahead in your job search with our up-to-date listings featuring
+        exciting new opportunities. Browse through a curated selection of roles
+        that cater to diverse skills and career levels. Whether you’re seeking
+        entry-level positions, mid-career advancements, or senior leadership
+        roles, our latest listings offer a variety of options to help you find
+        the perfect match. Start exploring today and take the next step in your
+        professional journey!
       </p>
 
       <section className=" mt-10 flex justify-center place-items-center gap-10 items-center flex-wrap mx-auto lg:grid lg:grid-cols-3 lg:gap-5 lg:w-fit">
