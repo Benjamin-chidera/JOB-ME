@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 export interface RegisterFormData {
   firstname: string;
   lastname: string;
@@ -16,20 +15,31 @@ export interface ContactFormData {
   phonenumber: string;
   subject: string;
   message: string;
-
 }
+
+interface ErrorResponse {
+  response?: {
+    data?: {
+      err?: string;
+    };
+  };
+}
+
+type registerTypes = {
+  user: null | unknown;
+  status: string;
+  error: ErrorResponse | null;
+  contact: null | unknown;
+};
 
 export const registerUser = createAsyncThunk<any, RegisterFormData>(
   "user/registerUser",
   async (formData: RegisterFormData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
-        "/api/signup",
-        formData
-      );
+      const { data } = await axios.post("/api/signup", formData);
       return data;
     } catch (error) {
-      return rejectWithValue(error);
+       return rejectWithValue(error as ErrorResponse);
     }
   }
 );
@@ -38,25 +48,15 @@ export const contactUs = createAsyncThunk<any, ContactFormData>(
   "user/contactUs",
   async (form, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
-        "/api/contact",
-        form
-      );
+      const { data } = await axios.post("/api/contact", form);
 
       return data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+       return rejectWithValue(error as ErrorResponse);
     }
   }
 );
-
-type registerTypes = {
-  user: null;
-  status: string;
-  error: null | unknown;
-  contact: null | unknown;
-};
 
 const initialState: registerTypes = {
   user: null,
@@ -71,19 +71,19 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerUser.pending, (state, { payload }) => {
         state.status = "loading";
-        state.error = null;
+        state.error = payload ?? null;
         state.user = null;
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.status = "idle";
-        state.error = null;
+        state.error = payload;
         state.user = payload;
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.status = "idle";
-        state.error = payload;
+        state.error = payload ?? null;
         state.user = null;
       })
 
@@ -101,7 +101,7 @@ const authSlice = createSlice({
       })
       .addCase(contactUs.rejected, (state, { payload }) => {
         state.status = "idle";
-        state.error = payload;
+        state.error = payload ?? null;
         state.contact = null;
       });
   },

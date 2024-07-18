@@ -186,7 +186,7 @@ const jobSlice = createSlice({
         state.postJob = payload;
       })
       .addCase(postJobs.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.postJob = null;
       })
@@ -203,7 +203,7 @@ const jobSlice = createSlice({
         state.employerJobs = payload;
       })
       .addCase(getEmployerJobs.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.employerJobs = [];
       })
@@ -220,7 +220,7 @@ const jobSlice = createSlice({
         state.employerJobsDetail = payload;
       })
       .addCase(getEmployerJobsDetails.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.employerJobsDetail = null;
       })
@@ -237,7 +237,7 @@ const jobSlice = createSlice({
         state.allJobs = payload;
       })
       .addCase(getAllJobs.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.allJobs = [];
       })
@@ -254,7 +254,7 @@ const jobSlice = createSlice({
         state.apply = payload;
       })
       .addCase(applyJobs.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.apply = null;
       })
@@ -271,7 +271,7 @@ const jobSlice = createSlice({
         state.appliedJobs = payload;
       })
       .addCase(getApplliedJobs.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.appliedJobs = [];
       })
@@ -288,7 +288,7 @@ const jobSlice = createSlice({
         state.applicantJobDetails = payload;
       })
       .addCase(getApplicantJobDetails.rejected, (state, { payload }) => {
-        state.status = "idle";
+        state.status = "failed";
         state.error = payload;
         state.applicantJobDetails = null;
       });

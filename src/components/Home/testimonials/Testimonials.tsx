@@ -39,7 +39,7 @@ export const Testimonials = () => {
         Feedbacks from clients
       </h4>
 
-      <section className="md:flex gap-7 items-center justify-center mt-7 ">
+      <section className="md:flex gap-7 items-center justify-center mt-7 w-fit mx-auto">
         {testimonails.map((t) => (
           <div key={t.id} className="bg-[#F5F3F399] p-4 rounded-xl text-center mt-3 md:mt-0 w-[300px]">
             <Image

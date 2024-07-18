@@ -73,7 +73,7 @@ export const ApplicantDetail = ({ j }: jobsType) => {
     <main className=" mx-5 border lg:border-0 m-2 px-2 rounded-lg">
       <section className="lg:w-[1020px] mx-auto lg:border mb-4 md:h-[100px] p-5 md:flex justify-between items-center rounded-lg lg:shadow-lg">
         <Link
-          href={`/jobs/${j.job}`}
+          href={`/jobs/${j?.job}`}
           className="flex items-center gap-5 flex-1 mb-2 lg:mb-0 text-xs"
         >
           Job Details
@@ -81,13 +81,13 @@ export const ApplicantDetail = ({ j }: jobsType) => {
 
         <div className=" flex-1">
           <p className="text-[#0DCAF0] capitalize text-sm mode w-fit px-3 p-2">
-            {j.user.firstname} {j.user.lastname}
+            {j?.user?.firstname} {j?.user?.lastname}
           </p>
           <p className=" text-gray-400 mt-2 flex items-center gap-1  text-xs">
             <span>
               <CiClock2 size={24} />
             </span>{" "}
-            Applied {format(j.createdAt)}
+            Applied {format(j?.createdAt)}
           </p>
         </div>
 
@@ -99,7 +99,7 @@ export const ApplicantDetail = ({ j }: jobsType) => {
             {j.phonenumber}
           </p>
 
-          <p className="mt-1 ml-2  text-xs">{j.user.email}</p>
+          <p className="mt-1 ml-2  text-xs">{j?.user?.email}</p>
         </div>
         <div className="mt-2 lg:mt-0">
           {session?.user?.role !== "employer" && (

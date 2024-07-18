@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { registerUser } from "@/redux/app/authSlice";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type Inputs = {
   email: string;
@@ -24,8 +24,11 @@ type Inputs = {
   confirmPassword: string;
 };
 
+
+
 const JobSeeker = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { status, error } = useAppSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -57,12 +60,13 @@ const JobSeeker = () => {
     };
 
     dispatch(registerUser(formData)).unwrap();
-    router.push("/login")
+    router.push("/login");
   };
 
   const handleGoogleSignIn = () => {
     signIn("google", { callbackUrl: "/" });
   };
+  // console.log(error?.response?.data?.err);
 
   return (
     <main className="login w-full h-screen  flex items-center justify-center">
@@ -80,6 +84,10 @@ h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter ba
         <div className=" text-center">
           <h4 className="font-semibold text-xl">Sign Up!</h4>
           <h5 className=" text-xl">Register to hit your dream job!</h5>
+
+          <p className=" text-sm text-red-600 mt-5">
+            {error?.response?.data?.err}
+          </p>
         </div>
 
         <form
@@ -196,8 +204,11 @@ h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter ba
           </section>
 
           <div>
-            <button className=" bg-[#0DCAF0] w-full py-4 text-white text-xl mt-10 rounded-2xl">
-              Sign Up
+            <button
+              className=" bg-[#0DCAF0] w-full py-4 text-white text-xl mt-10 rounded-2xl"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Signing up" : "Sign Up"}
             </button>
           </div>
         </form>

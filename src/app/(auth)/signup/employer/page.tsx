@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { registerUser } from "@/redux/app/authSlice";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type Inputs = {
   email: string;
@@ -26,6 +26,7 @@ type Inputs = {
 
 const Employer = () => {
   const [showPassword, setShowPassword] = useState(false);
+    const { status } = useAppSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -196,8 +197,11 @@ h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter ba
           </section>
 
           <div>
-            <button className=" bg-[#0DCAF0] w-full py-4 text-white text-xl mt-10 rounded-2xl">
-              Sign Up
+            <button
+              className=" bg-[#0DCAF0] w-full py-4 text-white text-xl mt-10 rounded-2xl"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Signing up" : "Sign Up"}
             </button>
           </div>
         </form>

@@ -15,27 +15,20 @@ export const Footer = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
-  if (pathname === "/login") {
-    return null;
-  }
-
-  if (pathname === "/signup") {
-    return null;
-  }
-
-  if (pathname === "/signup/jobSeeker") {
-    return null;
-  }
-
-  if (pathname === "/signup/employer") {
+  if (
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/signup/jobSeeker" ||
+    pathname === "/signup/employer"
+  ) {
     return null;
   }
 
   return (
-    <main className="mb-7 mx-5">
+    <main className="mb-1 mx-5">
       <div className=" bg-gray-500 h-0.5 w-full max-w-full" />
 
-      <section className="w-10/12 my-10 mx-auto lg:flex items-center justify-between">
+      <section className="w-10/12 my-4 mx-auto lg:flex items-center justify-between">
         <div>
           <Image src={logo} width={100} height={100} alt="Company-logo" />
 
@@ -95,14 +88,24 @@ export const Footer = () => {
               <Link href={"/jobs"}>Find Jobs</Link>
             </li>
             <li className=" list-disc">
-              <Link href={`${session?.user.role === "employer" ? "/post-jobs" : "/jobs"}`}>Post a Jobs</Link>
+              <Link
+                href={`${
+                  session?.user.role === "employer"
+                    ? "/employer/post-jobs"
+                    : "/jobs"
+                }`}
+              >
+                Post a Jobs
+              </Link>
             </li>
             <li className=" list-disc">
               <Link href={"/contact"}>Contact Us</Link>
             </li>
-            <li className=" list-disc">
-              <Link href={"/login"}>Login</Link>
-            </li>
+            {!session && (
+              <li className=" list-disc">
+                <Link href={"/login"}>Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </section>
@@ -111,3 +114,5 @@ export const Footer = () => {
     </main>
   );
 };
+
+export default Footer;

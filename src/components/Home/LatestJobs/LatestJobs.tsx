@@ -21,7 +21,7 @@ export const LatestJobs = () => {
   const { allJobs, status } = useAppSelector((state) => state.jobs);
 
   const getThree = allJobs?.slice(0, 6);
-  console.log(status);
+  console.log(getThree);
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -36,20 +36,22 @@ export const LatestJobs = () => {
         vitae nisl imperdiet auctor mattis viverra egestas mattis.
       </p>
 
-      <section className=" mt-10 flex justify-center place-items-center gap-10 items-center flex-wrap mx-auto">
+      <section className=" mt-10 flex justify-center place-items-center gap-10 items-center flex-wrap mx-auto lg:grid lg:grid-cols-3 lg:gap-5 lg:w-fit">
         {status === "loading" ? (
           <LatestJobSkeleton num={getThree.length || 3} />
+        ) : getThree.length === 0 ? (
+          <p className=" font-bold mt-7 text-3xl">There are no latest job</p>
         ) : (
           getThree?.map((job) => (
             <div
               key={job.id}
-              className="w-[360px] border rounded-xl text-start"
+              className="w-[300px] border rounded-xl text-start"
             >
               <div className="p-5">
                 <Link href={`/jobs/${job._id}`}>
                   <h2 className=" font-semibold text-xl">{job.positions}</h2>
 
-                  <p className=" text-gray-400 mt-2 flex items-center gap-1">
+                  <p className=" text-gray-400 mt-2 flex items-center gap-1 mb-2">
                     <span>
                       <CiClock2 size={24} />
                     </span>{" "}

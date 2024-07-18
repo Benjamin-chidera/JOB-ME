@@ -27,6 +27,10 @@ const Applied = ({ params }: { params: { id: string } }) => {
       <section className="mt-10">
         {status === "loading" ? (
           <JobSkeleton num={appliedJobs?.applicants?.length || 5} />
+        ) : appliedJobs?.applicants?.length === 0 ? (
+          <p className=" font-bold mt-7 text-3xl text-center">
+            There are no applicants for this job
+          </p>
         ) : (
           appliedJobs?.applicants?.map((j) => (
             <ApplicantDetail key={j.id} j={j} />
@@ -46,7 +50,7 @@ interface RootState {
     appliedJobs: {
       applicants: any[]; // Adjust this type if you know the structure of the results
     };
-    status: string
+    status: string;
     // Add other state properties here as needed
   };
   // Add other slice states here as needed

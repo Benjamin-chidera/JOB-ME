@@ -4,6 +4,7 @@ import { JobSelector } from "@/components/Home/jobSelector/JobSelector";
 import "./../components/Home/hero.css";
 import vector from "../../public/Vector.png";
 import people from "../../public/people.png";
+import woman from "../../public/woman.png";
 import work from "../../public/work.png";
 import skillman from "../../public/skillman.png";
 import Image from "next/image";
@@ -62,7 +63,7 @@ export default function Home() {
           FIND JOBS AND HIRE AMAZING TALENTS!
         </p>
 
-        <div className=" mx-auto w-10/12">
+        <div className=" mx-auto w-11/12 md:w-10/12">
           <JobSelector
             jobType={jobType}
             setJobType={setJobType}
@@ -78,7 +79,7 @@ export default function Home() {
       </div>
 
       <section className="  bg-[#F5F3F3]">
-        <div className=" py-10  w-10/12 mx-auto">
+        <div className=" py-10 w-11/12 md:w-10/12 mx-auto">
           <div className="md:flex items-center justify-center gap-32">
             <div className="relative flex justify-center">
               <Image
@@ -98,7 +99,7 @@ export default function Home() {
                 Find Millions of Job Opportunities Right for You!
               </h2>
 
-              <p className="max-w-[470px] mb-6">
+              <p className="max-w-[470px] mb-6 mt-3 font-[500]">
                 Lorem ipsum dolor sit amet consectetur. Duis sed ornare
                 adipiscing sed platea integer habitant. Eros quis hac amet
                 dignissim morbi vulputate eriva it commodo mi. Est mauris diam
@@ -119,10 +120,10 @@ export default function Home() {
           <div className="md:flex items-center justify-center gap-32 mt-10">
             <div className="mt-5 lg:mt-0">
               <h2 className="font-semibold text-xl md:text-2xl lg:text-3xl max-w-[450px]">
-                Find Millions of Job Opportunities Right for You!
+                Looking for the World’s Best Talents?
               </h2>
 
-              <p className="max-w-[470px] mb-6">
+              <p className="max-w-[470px] mb-6 mt-3 font-[500]">
                 Lorem ipsum dolor sit amet consectetur. Duis sed ornare
                 adipiscing sed platea integer habitant. Eros quis hac amet
                 dignissim morbi vulputate eriva it commodo mi. Est mauris diam
@@ -146,7 +147,7 @@ export default function Home() {
                 className="w-[255px] lg:w-[450px]"
               />
               <Image
-                src={people}
+                src={woman}
                 alt="Vector"
                 className="w-[250px] lg:w-[450px] absolute -bottom-4"
               />
@@ -161,7 +162,7 @@ export default function Home() {
         <Image
           src={work}
           alt="Vector"
-          className=" w-10/12 mx-auto lg:w-[1020px]"
+          className=" w-11/12 md:w-10/12 mx-auto lg:w-[1020px]"
         />
       </section>
 
@@ -170,7 +171,7 @@ export default function Home() {
 
       {/* skill set */}
 
-      <section className="  skills lg:h-[400px] py-10 lg:py-0 mx-auto px-10 md:px-20 ">
+      <section className="  skills lg:h-[400px] py-10 lg:py-0 mx-auto px-3 md:px-20 ">
         <div className="flex justify-center items-center w-11/12  mx-auto">
           <div>
             <h2 className="font-semibold text-xl md:max-w-[300px]">

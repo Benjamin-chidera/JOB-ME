@@ -75,9 +75,15 @@ const Jobs = () => {
         </div>
       </section>
 
+      {}
+
       <section className="mt-10">
         {loading ? (
           <JobSkeleton num={jobs.length || 5} />
+        ) : jobs.length === 0 ? (
+          <p className="font-bold mt-7 text-3xl text-center">
+            There are no jobs available
+          </p>
         ) : (
           jobs.map((j) => (
             <JobLists

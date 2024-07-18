@@ -107,8 +107,8 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const salary = employerJobsDetail?.salary ?? 0;
 
   return (
-    <main className="mt-10">
-      <section className="lg:flex justify-center gap-14 mb-10 w-11/12 mx-auto">
+    <main className="mt-10 ">
+      <section className="lg:flex justify-center gap-14 mb-10 w-10/12 mx-auto">
         <section>
           {status === "loading" ? (
             <JobDetailsSkeletonName />

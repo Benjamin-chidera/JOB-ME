@@ -29,9 +29,13 @@ export const Navbar = () => {
     return null;
   }
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <main
-      className={`w-10/12 mx-auto flex items-center justify-between h-18 lg:h-20 `}
+      className={`w-11/12 md:w-10/12 mx-auto flex items-center justify-between h-18 lg:h-20 `}
     >
       <Link href={"/"}>
         <Image src={logo} width={100} height={100} alt="Company-logo" />
@@ -74,19 +78,6 @@ export const Navbar = () => {
               </Link>
             </li>
           )}
-
-          {/* {session?.user?.role === "employer" && (
-            <li>
-              <Link
-                href="/jobs/applied"
-                className={` text-lg ${
-                  pathname === "/jobs/applied" ? "text-[#0DCAF0]" : "text-black"
-                }`}
-              >
-                Jobs Applied
-              </Link>
-            </li>
-          )} */}
 
           {session?.user?.role === "employer" && (
             <li>
@@ -154,7 +145,7 @@ export const Navbar = () => {
             <div className=" lg:hidden px-5">
               {/* mobile devices */}
               <ul className="flex flex-col mt-10 gap-10">
-                <li>
+                <li onClick={handleClose}>
                   <Link
                     href="/"
                     className={` text-lg ${
@@ -164,7 +155,7 @@ export const Navbar = () => {
                     Home
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleClose}>
                   <Link
                     href="/jobs"
                     className={` text-lg ${
@@ -176,7 +167,7 @@ export const Navbar = () => {
                     Job Listings
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleClose}>
                   <Link
                     href="/contact"
                     className={` text-lg ${
@@ -187,23 +178,8 @@ export const Navbar = () => {
                   </Link>
                 </li>
 
-                {/* {session?.user?.role === "employer" && (
-                  <li>
-                    <Link
-                      href="/jobs/applied"
-                      className={` text-lg ${
-                        pathname === "/jobs/applied"
-                          ? "text-[#0DCAF0]"
-                          : "text-black"
-                      }`}
-                    >
-                      Jobs Applied
-                    </Link>
-                  </li>
-                )} */}
-
                 {session?.user?.role === "employer" && (
-                  <li>
+                  <li onClick={handleClose}>
                     <Link
                       href="/jobs/employer"
                       className={` text-lg ${
