@@ -20,7 +20,7 @@ import { LatestJobSkeleton } from "@/components/skeleton/LatestJobSkeleton";
 export const LatestJobs = () => {
   const { allJobs, status } = useAppSelector((state) => state.jobs);
 
-  const getThree = allJobs?.slice(0, 6);
+  const getThree = allJobs?.jobs?.slice(0, 6) || [];
   console.log(getThree);
 
   const router = useRouter();
@@ -38,8 +38,8 @@ export const LatestJobs = () => {
 
       <section className=" mt-10 flex justify-center place-items-center gap-10 items-center flex-wrap mx-auto lg:grid lg:grid-cols-3 lg:gap-5 lg:w-fit">
         {status === "loading" ? (
-          <LatestJobSkeleton num={getThree.length || 3} />
-        ) : getThree.length === 0 ? (
+          <LatestJobSkeleton num={getThree?.length || 3} />
+        ) : getThree?.length === 0 ? (
           <p className=" font-bold mt-7 text-3xl">There are no latest job</p>
         ) : (
           getThree?.map((job) => (

@@ -9,6 +9,8 @@ interface IUser extends Document {
   email: string;
   password: string;
   role: string;
+  resetToken: string;
+  resetTokenExpiry: number;
 }
 
 const UserSchema: Schema<IUser> = new mongoose.Schema(
@@ -41,6 +43,8 @@ const UserSchema: Schema<IUser> = new mongoose.Schema(
       enum: ["jobseeker", "employer"],
       default: "jobseeker",
     },
+    resetToken: String,
+    resetTokenExpiry: Date,
   },
   { timestamps: true }
 );

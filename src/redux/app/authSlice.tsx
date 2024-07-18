@@ -17,6 +17,14 @@ export interface ContactFormData {
   message: string;
 }
 
+export interface ForgottenPasswordFormData {
+  email: string;
+}
+
+export interface ResetPasswordFormData {
+  password: string;
+}
+
 interface ErrorResponse {
   response?: {
     data?: {
@@ -30,6 +38,8 @@ type registerTypes = {
   status: string;
   error: ErrorResponse | null;
   contact: null | unknown;
+  forgotten: null | unknown;
+  reset: null | unknown;
 };
 
 export const registerUser = createAsyncThunk<any, RegisterFormData>(
@@ -39,7 +49,7 @@ export const registerUser = createAsyncThunk<any, RegisterFormData>(
       const { data } = await axios.post("/api/signup", formData);
       return data;
     } catch (error) {
-       return rejectWithValue(error as ErrorResponse);
+      return rejectWithValue(error as ErrorResponse);
     }
   }
 );
@@ -53,16 +63,48 @@ export const contactUs = createAsyncThunk<any, ContactFormData>(
       return data;
     } catch (error) {
       console.log(error);
-       return rejectWithValue(error as ErrorResponse);
+      return rejectWithValue(error as ErrorResponse);
     }
   }
 );
+
+export const forgottenPassword = createAsyncThunk<
+  any,
+  ForgottenPasswordFormData
+>("user/forgottenPassword", async (form, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.post("/api/auth/forgotten-password", form);
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    return rejectWithValue(error as ErrorResponse);
+  }
+});
+
+export const resetPassword = createAsyncThunk<
+  any,
+  ResetPasswordFormData
+>("user/resetPassword", async (formData, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.post("/api/auth/reset-password", formData);
+    console.log(data);
+    
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    return rejectWithValue(error as ErrorResponse);
+  }
+});
 
 const initialState: registerTypes = {
   user: null,
   status: "idle",
   error: null,
   contact: null,
+  forgotten: null,
+  reset: null,
 };
 
 const authSlice = createSlice({
@@ -103,6 +145,42 @@ const authSlice = createSlice({
         state.status = "idle";
         state.error = payload ?? null;
         state.contact = null;
+      })
+
+      // forgotten password
+
+      .addCase(forgottenPassword.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+        state.forgotten = null;
+      })
+      .addCase(forgottenPassword.fulfilled, (state, { payload }) => {
+        state.status = "idle";
+        state.error = null;
+        state.forgotten = payload;
+      })
+      .addCase(forgottenPassword.rejected, (state, { payload }) => {
+        state.status = "idle";
+        state.error = payload ?? null;
+        state.forgotten = null;
+      })
+
+      // reset password
+
+      .addCase(resetPassword.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+        state.reset = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, { payload }) => {
+        state.status = "idle";
+        state.error = null;
+        state.reset = payload;
+      })
+      .addCase(resetPassword.rejected, (state, { payload }) => {
+        state.status = "idle";
+        state.error = payload ?? null;
+        state.reset = null;
       });
   },
 });

@@ -19,7 +19,7 @@ export const JobDetailsSkeletonMap = () => {
 export const JobDetailsSkeletonText = () => {
   return (
     <main>
-      <div className="skeleton w-[100%] max-w-full h-[300px] mt-2"></div>
+      <div className="skeleton w-[100%] max-w-full h-[350px] mt-2"></div>
     </main>
   );
 };

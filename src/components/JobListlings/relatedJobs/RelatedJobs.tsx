@@ -22,7 +22,7 @@ export const RelatedJobs = ({ sliceRelatedJobs, status }: any) => {
     <main className=" w-11/12 mx-auto">
       <section className=" mt-10 flex justify-center items-center flex-wrap mx-auto gap-10">
         {status === "loading" ? (
-          <LatestJobSkeleton num={sliceRelatedJobs.length || 3} />
+          <LatestJobSkeleton num={sliceRelatedJobs?.length || 3} />
         ) : (
           sliceRelatedJobs?.map(
             (job: {

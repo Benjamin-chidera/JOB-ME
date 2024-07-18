@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import "../jobSelector/jobSelector.css";
 import { usePathname } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { getAllJobs } from "@/redux/app/jobSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
@@ -35,24 +34,17 @@ export const JobSelector = ({
 
   useEffect(() => {
     dispatch(getAllJobs());
-  }, []);
+  }, [dispatch]);
 
   const { allJobs } = useAppSelector((state) => state.jobs);
 
+  const jobs = allJobs?.jobs || [];
+
   const uniqueCompanies = Array.from(
-    new Set(allJobs?.jobs?.map((job) => job.companyName) || [])
+    new Set(jobs.map((job) => job.companyName))
   );
-
-  const uniqueCountries = Array.from(
-    new Set(allJobs?.jobs?.map((job) => job.country))
-  );
-
-  const uniquePositions = Array.from(
-    new Set(allJobs?.jobs?.map((job) => job.positions))
-  );
-
-  // console.log(allJobs);
-  
+  const uniqueCountries = Array.from(new Set(jobs.map((job) => job.country)));
+  const uniquePositions = Array.from(new Set(jobs.map((job) => job.positions)));
 
   return (
     <main>
@@ -70,14 +62,14 @@ export const JobSelector = ({
           value={jobType}
           onChange={(e) => setJobType(e.target.value)}
         >
-          <option disabled selected>
+          <option value="" disabled>
             Select Job Type
           </option>
-          <option>Full-Time</option>
-          <option>Part-Time</option>
-          <option>Contract</option>
-          <option>Remote</option>
-          <option>Internship</option>
+          <option value="Full-Time">Full-Time</option>
+          <option value="Part-Time">Part-Time</option>
+          <option value="Contract">Contract</option>
+          <option value="Remote">Remote</option>
+          <option value="Internship">Internship</option>
         </select>
 
         {/* industry type */}
@@ -86,11 +78,13 @@ export const JobSelector = ({
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
         >
-          <option disabled selected>
+          <option value="" disabled>
             Select Industry
           </option>
           {uniqueCompanies.map((company) => (
-            <option key={company}>{company}</option>
+            <option key={company} value={company}>
+              {company}
+            </option>
           ))}
         </select>
 
@@ -100,11 +94,13 @@ export const JobSelector = ({
           value={position}
           onChange={(e) => setPosition(e.target.value)}
         >
-          <option disabled selected>
+          <option value="" disabled>
             Select Position
           </option>
-          {uniquePositions.map((position) => (
-            <option key={position}>{position}</option>
+          {uniquePositions.map((pos) => (
+            <option key={pos} value={pos}>
+              {pos}
+            </option>
           ))}
         </select>
 
@@ -114,11 +110,13 @@ export const JobSelector = ({
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         >
-          <option disabled selected>
+          <option value="" disabled>
             Select Location
           </option>
-          {uniqueCountries.map((country) => (
-            <option key={country}>{country}</option>
+          {uniqueCountries.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
         </select>
 

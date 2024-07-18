@@ -29,6 +29,14 @@ export const Navbar = () => {
     return null;
   }
 
+  if (pathname === "/forgotten-password") {
+    return null;
+  }
+
+  if (pathname.includes("/reset-password")) {
+    return null;
+  }
+
   const handleClose = () => {
     setOpen(false);
   };

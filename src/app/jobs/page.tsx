@@ -91,8 +91,8 @@ const Jobs = () => {
 
       <section className="mt-10">
         {loading ? (
-          <JobSkeleton num={jobs.length || 5} />
-        ) : jobs.length === 0 ? (
+          <JobSkeleton num={jobs?.length || 5} />
+        ) : jobs?.length === 0 ? (
           <p className="font-bold mt-7 text-3xl text-center">
             There are no jobs available
           </p>
@@ -102,7 +102,7 @@ const Jobs = () => {
               key={j._id}
               j={
                 j as unknown as {
-                  id: string;
+                  _id: string;
                   companyImage: string;
                   positions: string;
                   companyName: string;

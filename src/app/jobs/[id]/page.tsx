@@ -29,8 +29,8 @@ import {
 } from "@/components/skeleton/JobDetailsSkeleton";
 
 interface EmployerJobDetail {
-  responsibilities?: string | string[]; // Update to handle both string and string[]
-  skills?: string | string[]; // Update to handle both string and string[]
+  responsibilities?: string | string[];
+  skills?: string | string[];
   positions: string;
   companyImage: string;
   description: string;
@@ -42,11 +42,25 @@ interface EmployerJobDetail {
   id: string;
 }
 
+interface AllJobs {
+  jobs: EmployerJobDetail[];
+}
+
+interface JobState {
+  employerJobsDetail: EmployerJobDetail | null;
+  allJobs: AllJobs;
+  status: string;
+}
+
+interface RootState {
+  jobs: JobState;
+}
+
 const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const dispatch = useAppDispatch();
-  const { employerJobsDetail, allJobs, status } = useAppSelector(
-    (state) => state.jobs
+  const { employerJobsDetail, allJobs, status } = useSelector(
+    (state: RootState) => state.jobs
   );
 
   const { data: session } = useSession();
@@ -94,11 +108,15 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
     ? employerJobsDetail.skills
     : [employerJobsDetail?.skills || ""];
 
-  const isRelated = allJobs.filter(
-    (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
-  );
+  const isRelated =
+    allJobs?.jobs?.filter(
+      (job: EmployerJobDetail) =>
+        job.positions === employerJobsDetail?.positions
+    ) || [];
 
   const sliceRelatedJobs = isRelated?.slice(0, 3);
+
+  console.log(sliceRelatedJobs);
 
   const createdDate = employerJobsDetail?.createdAt
     ? new Date(employerJobsDetail?.createdAt)
@@ -194,11 +212,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
         </section>
 
         <section className="mx-5 lg:mx-0 mt-7 lg:mt-0">
-          {status === "loading" ? (
-            <JobDetailsSkeletonText />
-          ) : (
-            <h2 className="font-semibold text-2xl">Job Description:</h2>
-          )}
+          <h2 className="font-semibold text-2xl">Job Description:</h2>
 
           {status === "loading" ? (
             <JobDetailsSkeletonText />
@@ -207,19 +221,15 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
           )}
 
           <section className="mt-10">
-            {status === "loading" ? (
-              <JobDetailsSkeletonText />
-            ) : (
-              <h2 className="font-semibold text-2xl">
-                Duties & Responsibilities:
-              </h2>
-            )}
+            <h2 className="font-semibold text-2xl">
+              Duties & Responsibilities:
+            </h2>
 
             <div className="mt-5">
               <ul className="space-y-3">
                 {status === "loading" ? (
                   <JobDetailsSkeletonTextRes
-                    num={responsibilities.length || 5}
+                    num={responsibilities?.length || 5}
                   />
                 ) : (
                   responsibilities.map((item, index) => (
@@ -250,7 +260,7 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
             <div className="mt-5">
               <ul className="space-y-3">
                 {status === "loading" ? (
-                  <JobDetailsSkeletonTextRes num={skills.length || 5} />
+                  <JobDetailsSkeletonTextRes num={skills?.length || 5} />
                 ) : (
                   skills.map((item, index) => (
                     <li

@@ -40,14 +40,31 @@ interface EmployerJobDetail {
   experience: number;
   salary: number;
   id: string;
-  // Add other properties as needed
 }
 
-interface RootState {
-  jobs: {
-    appliedJobs: any[]; // Or a more specific type if you know the structure
-  };
+interface JobState {
+  postJob: PostJobData | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: any;
+  employerJobs: EmployerJobDetail[];
+  employerJobsDetail: EmployerJobDetail | null;
+  allJobs: { jobs: EmployerJobDetail[] } | null; // Update this line
+  apply: ApplyJobData | null;
+  appliedJobs: ApplyJobData[];
+  applicantJobDetails: ApplyJobData | null;
 }
+
+const initialState: JobState = {
+  postJob: null,
+  status: "idle",
+  error: null,
+  employerJobs: [],
+  employerJobsDetail: null,
+  allJobs: null, // Initialize as null
+  apply: null,
+  appliedJobs: [],
+  applicantJobDetails: null,
+};
 
 export const postJobs = createAsyncThunk<any, PostJobData>(
   "jobs/postJobs",
@@ -66,9 +83,7 @@ export const getEmployerJobs = createAsyncThunk(
   "jobs/getEmployerJobs",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(
-        "/api/jobs/employer"
-      );
+      const { data } = await axios.get("/api/jobs/employer");
       return data;
     } catch (error) {
       console.log(error);
@@ -103,10 +118,7 @@ export const applyJobs = createAsyncThunk<any, ApplyJobData>(
   "jobs/applyJobs",
   async (form, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
-        "/api/jobs/apply",
-        form
-      );
+      const { data } = await axios.post("/api/jobs/apply", form);
       return data;
     } catch (error) {
       console.log(error);
@@ -119,9 +131,7 @@ export const getApplliedJobs = createAsyncThunk<any, string>(
   "jobs/getApplliedJobs",
   async (userId: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(
-        `/api/jobs/apply?jobId=${userId}`
-      );
+      const { data } = await axios.get(`/api/jobs/apply?jobId=${userId}`);
       return data;
     } catch (error) {
       console.log(error);
@@ -134,9 +144,7 @@ export const getApplicantJobDetails = createAsyncThunk<any, string>(
   "jobs/getApplicantJobDetails",
   async (id: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(
-        `/api/jobs/apply/applied/${id}`
-      );
+      const { data } = await axios.get(`/api/jobs/apply/applied/${id}`);
       return data;
     } catch (error) {
       console.log(error);
@@ -144,32 +152,6 @@ export const getApplicantJobDetails = createAsyncThunk<any, string>(
     }
   }
 );
-
-interface JobState {
-  postJob: PostJobData | null;
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: any;
-  employerJobs: EmployerJobDetail[];
-  employerJobsDetail: EmployerJobDetail | null;
-  allJobs: {
-    jobs: EmployerJobDetail[];
-  } | null;
-  apply: ApplyJobData | null;
-  appliedJobs: ApplyJobData[];
-  applicantJobDetails: ApplyJobData | null;
-}
-
-const initialState: JobState = {
-  postJob: null,
-  status: "idle",
-  error: null,
-  employerJobs: [],
-  employerJobsDetail: null,
-  allJobs: null,
-  apply: null,
-  appliedJobs: [],
-  applicantJobDetails: null,
-};
 
 const jobSlice = createSlice({
   name: "jobs",

@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
 
 type jobsType = {
   j: {
-    id: string;
+    _id: string;
     companyImage: string;
     positions: string;
     companyName: string;
@@ -38,7 +38,7 @@ export const JobLists = ({ j }: jobsType) => {
     const checkApplicationStatus = async () => {
       if (session?.user?.id) {
         // Check local storage first
-        const localStorageKey = `application_${session.user.id}_${j.id}`;
+        const localStorageKey = `application_${session.user.id}_${j._id}`;
         const localStorageStatus = localStorage.getItem(localStorageKey);
 
         if (localStorageStatus) {
@@ -46,7 +46,7 @@ export const JobLists = ({ j }: jobsType) => {
         } else {
           try {
             const response = await fetch(
-              `/api/applications?userId=${session.user.id}&jobId=${j.id}`
+              `/api/applications?userId=${session.user.id}&jobId=${j._id}`
             );
             const data = await response.json();
             setHasApplied(data.applied);
@@ -60,7 +60,7 @@ export const JobLists = ({ j }: jobsType) => {
     };
 
     checkApplicationStatus();
-  }, [session?.user?.id, j.id]);
+  }, [session?.user?.id, j._id]);
 
   const router = useRouter();
 
@@ -68,7 +68,7 @@ export const JobLists = ({ j }: jobsType) => {
     <main className=" border lg:border-0 my-2 mx-3 px-2 rounded-lg">
       <section className="lg:w-10/12 mx-auto lg:border mb-4 md:h-[100px] p-5 md:flex justify-between items-center rounded-lg lg:shadow-lg">
         <Link
-          href={`/jobs/${j.id}`}
+          href={`/jobs/${j._id}`}
           className="flex items-center gap-5 flex-1 mb-2 lg:mb-0"
         >
           <Image
@@ -113,7 +113,7 @@ export const JobLists = ({ j }: jobsType) => {
                 hasApplied ? "bg-gray-400 cursor-not-allowed" : "bg-[#0DCAF0]"
               }`}
               // onClick={handleApplyForJob}
-              onClick={() => router.push(`/jobs/${j.id}/application`)}
+              onClick={() => router.push(`/jobs/${j._id}/application`)}
               disabled={hasApplied}
             >
               {hasApplied ? "Applied" : "Apply Now"}
@@ -121,7 +121,7 @@ export const JobLists = ({ j }: jobsType) => {
           )}
 
           {session?.user?.role === "employer" && (
-            <Link href={`/jobs/applicant/${j.id}`} className=" text-sm">
+            <Link href={`/jobs/applicant/${j._id}`} className=" text-sm">
               View Applicants
             </Link>
           )}

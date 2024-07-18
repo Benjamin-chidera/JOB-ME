@@ -19,7 +19,9 @@ export const Footer = () => {
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/signup/jobSeeker" ||
-    pathname === "/signup/employer"
+    pathname === "/signup/employer" ||
+    pathname === "/forgotten-password" ||
+    pathname.includes("/reset-password")
   ) {
     return null;
   }

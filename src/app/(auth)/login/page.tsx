@@ -8,7 +8,7 @@ import lk from "../../../../public/lk.png";
 import google from "../../../../public/google.png";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +21,7 @@ const Login = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { status, data: session } = useSession();
   const {
     register,
     handleSubmit,
@@ -51,9 +52,11 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-    const handleGoogleSignIn = () => {
-      signIn("google", { callbackUrl: "/" });
-    };
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
+
+  console.log(status);
 
   return (
     <main className="login w-full h-screen flex items-center justify-center">
@@ -118,7 +121,7 @@ const Login = () => {
               </label>
             </div>
             <div>
-              <Link href="/forgotPassword" className="text-blue-400">
+              <Link href="/forgotten-password" className="text-blue-400">
                 Forgot Password?
               </Link>
             </div>
@@ -126,7 +129,7 @@ const Login = () => {
 
           <div>
             <button className="bg-[#0DCAF0] w-full py-4 text-white text-xl mt-10 rounded-2xl">
-              Log In
+              {status === "loading" ? "Logging..." : "Log In"}
             </button>
           </div>
         </form>

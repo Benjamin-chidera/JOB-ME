@@ -19,8 +19,8 @@ const Employer = () => {
   return (
     <main className=" w-full mx-auto mb-10">
       {status === "loading" ? (
-        <JobSkeleton num={employerJobs.length || 5} />
-      ) : employerJobs.length === 0 ? (
+        <JobSkeleton num={employerJobs?.length || 5} />
+      ) : employerJobs?.length === 0 ? (
         <p className=" font-bold mt-7 text-3xl text-center">There are no jobs posted by any employer</p>
       ) : (
         employerJobs.map((j) => <EmployerJobList key={j.id} j={j} />)

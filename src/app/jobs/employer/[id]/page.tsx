@@ -49,9 +49,13 @@ const EmployerJobDetails = ({ params }: { params: { id: string } }) => {
     ? employerJobsDetail.skills
     : [employerJobsDetail?.skills || ""];
 
-  const isRelated = allJobs.filter(
-    (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
-  );
+  // const isRelated = allJobs?.filter(
+  //   (job: EmployerJobDetail) => job.positions === employerJobsDetail?.positions
+  // );
+
+   const isRelated = Array.isArray(allJobs)
+     ? allJobs.filter((job) => job?.positions === employerJobsDetail?.positions)
+     : [];
 
   const sliceRelatedJobs = isRelated?.slice(0, 3);
   // console.log({ sliceRelatedJobs });
