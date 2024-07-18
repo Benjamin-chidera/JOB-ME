@@ -33,12 +33,12 @@ export const POST = async (req: NextRequest) => {
     }
 
     // Add password validation
-    if (password.length < 8) {
-      return NextResponse.json(
-        { error: "Password must be at least 8 characters long" },
-        { status: 400 }
-      );
-    }
+    // if (password.length < 8) {
+    //   return NextResponse.json(
+    //     { error: "Password must be at least 8 characters long" },
+    //     { status: 400 }
+    //   );
+    // }
 
     user.password = await bcrypt.hash(password, 10);
     // user.resetToken = undefined;
