@@ -60,7 +60,7 @@ const Login = () => {
 
   return (
     <main className="login w-full h-screen flex items-center justify-center">
-      <section className="h-[623px] w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-none opacity-80">
+      <section className="h-fitw-[777px] pb-20 bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-none opacity-80">
         <div className="p-5">
           <Link href=".." className="text-blue-500">
             Go Back
@@ -134,9 +134,9 @@ const Login = () => {
           </div>
         </form>
 
-        <p className="text-center mt-6 font-semibold">Or continue with</p>
+        {/* <p className="text-center mt-6 font-semibold">Or continue with</p> */}
 
-        <div className="flex items-center justify-center gap-3 mt-3">
+        {/* <div className="flex items-center justify-center gap-3 mt-3">
           <button>
             <Image
               src={fb}
@@ -158,7 +158,7 @@ const Login = () => {
               className="w-[31px] h-[31px] object-cover"
             />
           </button>
-        </div>
+        </div> */}
 
         <div>
           <p className="text-center mt-6 font-semibold">

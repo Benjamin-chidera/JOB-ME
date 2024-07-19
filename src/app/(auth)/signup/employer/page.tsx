@@ -26,7 +26,7 @@ type Inputs = {
 
 const Employer = () => {
   const [showPassword, setShowPassword] = useState(false);
-    const { status } = useAppSelector((state) => state.auth);
+  const { status } = useAppSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -61,17 +61,13 @@ const Employer = () => {
     router.push("/login");
   };
 
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
+  // const handleGoogleSignIn = () => {
+  //   signIn("google", { callbackUrl: "/" });
+  // };
 
   return (
-    <main className="login w-full h-screen  flex items-center justify-center">
-      <section
-        className="
-h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-none opacity-80 
-"
-      >
+    <main className="login overflow-y-scroll">
+      <section className="w-[95%] max-w-[600px] bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-none opacity-80 p-8">
         <div className="p-5">
           <Link href={".."} className=" text-blue-500">
             Go Back
@@ -206,9 +202,9 @@ h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter ba
           </div>
         </form>
 
-        <p className=" text-center mt-6 font-semibold">Or continue with</p>
+        {/* <p className=" text-center mt-6 font-semibold">Or continue with</p> */}
 
-        <div className=" flex items-center justify-center gap-3 mt-3">
+        {/* <div className=" flex items-center justify-center gap-3 mt-3">
           <button>
             <Image
               src={fb}
@@ -231,7 +227,7 @@ h-[850px] pb-10 w-[777px] bg-white rounded-xl bg-clip-padding backdrop-filter ba
               className=" w-[31px] h-[31px] object-cover"
             />
           </button>
-        </div>
+        </div> */}
 
         <div>
           <p className=" text-center mt-6 font-semibold">
